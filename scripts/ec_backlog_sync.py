@@ -35,7 +35,7 @@ def run():
             failure=any(c.get("conclusion") in ("failure","timed_out","cancelled","action_required") for c in checks) or any(s.get("state")=="failure" or s.get("state")=="error" for s in statuses)
             pending=any(c.get("status")!="completed" for c in checks) or any(s.get("state")=="pending" for s in statuses)
             green=bool(checks or statuses) and not failure and not pending and all(c.get("conclusion") in ("success","neutral","skipped") for c in checks) and all(s.get("state")=="success" for s in statuses)
-            open_prs.append({"number":pr["number"],"url":pr["html_url"],"sha":sha,"ci":"failing" if failure else "observed_green" if green else "pending_or_unknown","backlog_ids":MARKER.findall(pr.get("body") or "")})
+            open_prs.append({"number":pr["number"],"url":pr["html_url"],"sha":sha,"branch":pr["head"]["ref"],"ci":"failing" if failure else "observed_green" if green else "pending_or_unknown","backlog_ids":MARKER.findall(pr.get("body") or "")})
         result["projects"][repo]={"issues":len(issues),"open_prs":open_prs,"linked_evidence":linked,"unlinked_prs":sum(not MARKER.search(p.get("body") or "") for p in prs),"note":"CI green is not proof of acceptance or required branch protection."}
     pathlib.Path("reports").mkdir(exist_ok=True)
     pathlib.Path("reports/github-sync.json").write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n")
