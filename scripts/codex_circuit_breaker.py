@@ -80,14 +80,14 @@ def check():
         return False
 
     body = (
-        "Automatic dispatch paused after 3 consecutive Codex infrastructure failures.\\n\\n"
-        + "\\n".join(
+        "Automatic dispatch paused after 3 consecutive Codex infrastructure failures.\n\n"
+        + "\n".join(
             f"- Run https://github.com/{REPO}/actions/runs/{run_id}: "
             + ", ".join(steps) for run_id, steps in failures
         )
-        + "\\n\\n**Recovery:** fix the root cause, then CLOSE THIS ISSUE to "
+        + "\n\n**Recovery:** fix the root cause, then CLOSE THIS ISSUE to "
           "explicitly reset the breaker. The next scheduled/manual Sync may dispatch again. "
-          "Product PRs still require manual merge.\\n"
+          "Product PRs still require manual merge.\n"
     )
     issue = api("/issues", "POST", {"title": TITLE, "body": body})
     print("Circuit breaker OPEN: " + issue["html_url"])
