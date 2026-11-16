@@ -51,6 +51,12 @@ jobs:
           token: ${{ secrets.PRODUCT_REPOS_WRITE_TOKEN }}
           persist-credentials: false
           fetch-depth: 30
+      - name: Load orchestrator PR description generator
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/erikacarvalh0/ec-orchestrator/contents/scripts/build_product_pr.py --jq .content | base64 -d > /tmp/ec-build-product-pr.py
+          python -m py_compile /tmp/ec-build-product-pr.py
       - name: Resolve upstream PR dependency
         id: dependency
         env:
@@ -200,9 +206,5 @@ jobs:
           git diff --cached --check
           git -c user.name='ec-orchestrator[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "feat: improve $AREA"
           git -c http.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)" push origin "HEAD:refs/heads/$BRANCH"
-          if [ "$DEPENDENCY_PR" = none ]; then
-            dependency_text="Dependencies: none"
-          else
-            dependency_text="Depends on: #$DEPENDENCY_PR. Merge upstream PR first, then retarget this PR to main and re-run CI. Current stacked base: $PR_BASE."
-          fi
-          gh pr create -R "$TARGET_REPO" --base "$PR_BASE" --head "$BRANCH" --title "feat: improve $AREA" --body "$(printf 'Automated Codex proposal for %s.\n\n%s\n\nRequires human review and merge.\n' "$ISSUE_URL" "$dependency_text")"
+          python /tmp/ec-build-product-pr.py --repo "$TARGET_REPO" --area "$AREA" --issue-url "$ISSUE_URL" --dependency "$DEPENDENCY_PR" --base "$PR_BASE" --output /tmp/ec-product-pr-body.md
+          gh pr create -R "$TARGET_REPO" --base "$PR_BASE" --head "$BRANCH" --title "feat: improve $AREA" --body-file /tmp/ec-product-pr-body.md
