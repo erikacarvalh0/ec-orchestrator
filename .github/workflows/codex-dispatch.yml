@@ -131,10 +131,24 @@ jobs:
           sudo -u codexagent sh -c 'cd /tmp/ec-codex-shared && pwd >/dev/null' || { echo 'FAIL: agent cannot enter Codex home'; exit 1; }
           # A preflight check avoids retrying the agent on broken permissions.
           sudo -u codexagent sh -c 'cd "$1" && git rev-parse --is-inside-work-tree >/dev/null' _ "$GITHUB_WORKSPACE"
-      - name: Inspect conventions and implement with Codex
+      - name: Bootstrap Codex proxy without running agent
         uses: openai/codex-action@v1
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          safety-strategy: unprivileged-user
+          codex-user: codexagent
+          codex-home: /tmp/ec-codex-shared
+      - name: Verify and grant agent read access to proxy configuration
+        run: |
+          set -euo pipefail
+          config=/tmp/ec-codex-shared/config.toml
+          test -s "$config" || { echo 'FAIL: Codex proxy config missing'; exit 1; }
+          sudo setfacl -m u:codexagent:r "$config"
+          sudo -u codexagent sh -c 'cat "$1" >/dev/null' _ "$config" || { echo 'FAIL: agent cannot read proxy config'; exit 1; }
+          # Do not print the config; it may contain sensitive settings.
+      - name: Inspect conventions and implement with Codex
+        uses: openai/codex-action@v1
+        with:
           permission-profile: ':workspace'
           safety-strategy: unprivileged-user
           codex-user: codexagent
