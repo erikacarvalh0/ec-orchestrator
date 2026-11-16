@@ -6,6 +6,7 @@ on:
 permissions:
   contents: read
   issues: write
+  actions: write
 jobs:
   sync:
     runs-on: ubuntu-latest
@@ -24,9 +25,9 @@ jobs:
           python scripts/reconcile_prs.py
           python scripts/dispatch_plan.py
       - name: Queue next dispatch task (orchestrator only)
-        if: github.event_name == 'workflow_dispatch'
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          EC_BACKLOG_READ_TOKEN: ${{ secrets.EC_BACKLOG_READ_TOKEN }}
         run: python scripts/queue_dispatch_issue.py
       - uses: actions/upload-artifact@v4
         with:
