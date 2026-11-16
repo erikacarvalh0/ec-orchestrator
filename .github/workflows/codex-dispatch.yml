@@ -140,6 +140,7 @@ jobs:
       - name: Bootstrap Codex proxy without running agent
         uses: openai/codex-action@v1
         with:
+          allow-bot-users: 'github-actions[bot]'
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           safety-strategy: unprivileged-user
           codex-user: codexagent
@@ -163,6 +164,7 @@ jobs:
       - name: Inspect conventions and implement with Codex
         uses: openai/codex-action@v1
         with:
+          allow-bot-users: 'github-actions[bot]'
           permission-profile: ':workspace'
           safety-strategy: unprivileged-user
           codex-user: codexagent
