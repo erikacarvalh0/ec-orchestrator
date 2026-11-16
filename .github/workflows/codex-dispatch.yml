@@ -126,11 +126,11 @@ jobs:
           sudo chown -R codexagent:codexagent "$GITHUB_WORKSPACE"
           sudo chmod 755 /home/runner /home/runner/work /home/runner/work/ec-orchestrator
           sudo chmod 1777 /tmp
-          sudo -u codexagent test -r "$GITHUB_WORKSPACE/.git/HEAD" || { echo 'FAIL: agent cannot read Git metadata'; exit 1; }
-          sudo -u codexagent test -w "$GITHUB_WORKSPACE" || { echo 'FAIL: agent cannot write workspace'; exit 1; }
-          sudo -u codexagent test -x /tmp/ec-codex-shared || { echo 'FAIL: agent cannot traverse Codex home'; exit 1; }
+          sudo -u codexagent sh -c 'cat "$1/.git/HEAD" >/dev/null' _ "$GITHUB_WORKSPACE" || { echo 'FAIL: agent cannot read Git metadata'; exit 1; }
+          sudo -u codexagent sh -c 'touch "$1/.codex-access-check" && rm "$1/.codex-access-check"' _ "$GITHUB_WORKSPACE" || { echo 'FAIL: agent cannot write workspace'; exit 1; }
+          sudo -u codexagent sh -c 'cd /tmp/ec-codex-shared && pwd >/dev/null' || { echo 'FAIL: agent cannot enter Codex home'; exit 1; }
           # A preflight check avoids retrying the agent on broken permissions.
-          sudo -u codexagent sh -c 'cd "$1" && test -w . && test -r .git/HEAD' _ "$GITHUB_WORKSPACE"
+          sudo -u codexagent sh -c 'cd "$1" && git rev-parse --is-inside-work-tree >/dev/null' _ "$GITHUB_WORKSPACE"
       - name: Inspect conventions and implement with Codex
         uses: openai/codex-action@v1
         with:
