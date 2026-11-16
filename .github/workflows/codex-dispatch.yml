@@ -102,18 +102,21 @@ jobs:
           fi
           command -v setfacl
           sudo chmod 711 /home/runner
-          sudo -u codexagent test -x /home/runner
+          echo 'Checking runner home traversal'
+          sudo -u codexagent test -x /home/runner || { echo 'FAIL: codexagent cannot traverse /home/runner'; exit 1; }
           sudo setfacl -m u:codexagent:rwx /home/runner/codex-shared
           sudo setfacl -d -m u:codexagent:rwx /home/runner/codex-shared
-          sudo -u codexagent test -w /home/runner/codex-shared
+          echo 'Checking shared Codex home ACL'
+          sudo getfacl -p /home/runner/codex-shared
+          sudo -u codexagent test -w /home/runner/codex-shared || { echo 'FAIL: codexagent cannot write shared Codex home'; exit 1; }
           sudo -u codexagent sh -c 'touch /home/runner/codex-shared/.access-check && rm /home/runner/codex-shared/.access-check'
           sudo install -d -o codexagent -g codexagent -m 700 /home/codexagent
           sudo chown -R codexagent:codexagent "$GITHUB_WORKSPACE"
           sudo chmod 755 /home/runner /home/runner/work /home/runner/work/ec-orchestrator
           sudo chmod 1777 /tmp
-          sudo -u codexagent test -r "$GITHUB_WORKSPACE/.git/HEAD"
-          sudo -u codexagent test -w "$GITHUB_WORKSPACE"
-          sudo -u codexagent test -x /home/runner/codex-shared
+          sudo -u codexagent test -r "$GITHUB_WORKSPACE/.git/HEAD" || { echo 'FAIL: agent cannot read Git metadata'; exit 1; }
+          sudo -u codexagent test -w "$GITHUB_WORKSPACE" || { echo 'FAIL: agent cannot write workspace'; exit 1; }
+          sudo -u codexagent test -x /home/runner/codex-shared || { echo 'FAIL: agent cannot traverse Codex home'; exit 1; }
           # A preflight check avoids retrying the agent on broken permissions.
           sudo -u codexagent sh -c 'cd "$1" && test -w . && test -r .git/HEAD' _ "$GITHUB_WORKSPACE"
       - name: Inspect conventions and implement with Codex
