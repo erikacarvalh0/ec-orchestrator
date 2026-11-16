@@ -33,11 +33,19 @@ area_config = next((a for a in project_config["areas"] if a["id"] == area), None
 task = next((t for t in area_config["tasks"] if t["id"] == task_id), None) if area_config else None
 if task is None:
     raise SystemExit("Task not present in trusted backlog config")
+if task.get("status") != "ready":
+    raise SystemExit("Task blocked by external dependency or pending scope decision")
+# GitHub output values must be single-line and originate from trusted config.
+scope = str(task["scope"]).replace("\\r", " ").replace("\\n", " ")
+acceptance = str(task["acceptance"]).replace("\\r", " ").replace("\\n", " ")
 out = os.environ["GITHUB_OUTPUT"]
 with open(out, "a") as f:
     f.write(f"repository=erikacarvalh0/{project}\n")
     f.write(f"area={area}\n")
     f.write(f"task_id={task_id}\n")
+    f.write(f"task_scope={scope}\\n")
+    f.write(f"task_acceptance={acceptance}\\n")
+    f.write(f"allow_workflow_changes={str(task.get('allow_workflow_changes', False)).lower()}\\n")
     f.write(f"branch=codex/dispatch-{number}-{task_id}\n")
     f.write(f"issue_url={issue['html_url']}\n")
 print(f"Validated issue {number}: {project}:{task_id}")
