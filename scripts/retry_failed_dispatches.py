@@ -45,6 +45,16 @@ def run():
     if any(r["status"] != "completed" for r in runs):
         print("Skipping retries: dispatch workflow currently active")
         return
+    # A verified successful executor run provides a recovery boundary for
+    # dispatches that exhausted retries during the previous infrastructure outage.
+    successful = [
+        r for r in runs if r["status"] == "completed" and r["conclusion"] == "success"
+    ]
+    recovery_at = max(
+        (dt.datetime.fromisoformat(r["created_at"].replace("Z", "+00:00"))
+         for r in successful),
+        default=None,
+    )
     issues = pages(BASE + ORCH + "/issues?state=open")
     for issue in issues:
         if "pull_request" in issue:
@@ -59,11 +69,21 @@ def run():
         if not statuses or statuses[-1][0] != "failed":
             continue
         failures = sum(status == "failed" for status, _ in statuses)
-        if failures != 1:  # at most one automatic retry per issue
+        failed_at = dt.datetime.fromisoformat(statuses[-1][1]["created_at"].replace("Z", "+00:00"))
+        # Standard retry: once per issue. Recovery retry: once only when
+        # a newer successful executor proves the global bootstrap was repaired.
+        recovery = (
+            failures > 1
+            and recovery_at is not None
+            and failed_at < recovery_at
+            and not any(status == "retry_queued" and
+                        dt.datetime.fromisoformat(comment["created_at"].replace("Z", "+00:00")) > failed_at
+                        for status, comment in statuses)
+        )
+        if failures != 1 and not recovery:
             print(f"Skipping {key}: retry limit reached")
             continue
-        failed_at = dt.datetime.fromisoformat(statuses[-1][1]["created_at"].replace("Z", "+00:00"))
-        if now - failed_at < COOLDOWN:
+        if now - failed_at < COOLDOWN and not recovery:
             continue
         target = "erikacarvalh0/" + key.split(":")[0]
         branch = f"codex/dispatch-{issue['number']}-{key.split(':')[1]}"
@@ -80,7 +100,7 @@ def run():
         # recovery rather than risking duplicate jobs on the next sync.
         api("POST", issue["comments_url"], payload={
             "body": "### Dispatch status: retry_queued\n\n"
-                    "One automatic retry reserved after a failed execution. "
+                    ("One recovery retry reserved after a successful executor bootstrap. " if recovery else "One automatic retry reserved after a failed execution. ") 
                     "If dispatch does not start, investigate manually."
         })
         api("POST", BASE + ORCH + "/actions/workflows/codex-dispatch.yml/dispatches",
