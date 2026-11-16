@@ -38,7 +38,14 @@ def api(path, method="GET", payload=None):
 
 
 def check():
-    issues = api("/issues?state=all&per_page=100")
+    issues = []
+    for page in range(1, 11):
+        batch = api(f"/issues?state=all&per_page=100&page={page}")
+        issues.extend(batch)
+        if len(batch) < 100:
+            break
+    else:
+        raise RuntimeError("Breaker issue pagination incomplete; refusing dispatch")
     breakers = [i for i in issues if "pull_request" not in i and i["title"] == TITLE]
     if any(i["state"] == "open" for i in breakers):
         print("Circuit breaker OPEN: close the breaker issue after fixing infrastructure.")
