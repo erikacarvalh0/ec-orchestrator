@@ -42,7 +42,8 @@ def eligible(pr, policy):
         if any(fnmatch.fnmatch(file["filename"], pattern) for pattern in blocked):
             return False, "sensitive file: " + file["filename"]
     sha = pr["head"]["sha"]
-    checks = request(f"repos/{REPO}/commits/{sha}/check-runs?per_page=100").get("check_runs", [])\n    if len(checks) == 100:\n        return False, "check pagination not fully evaluated"
+    checks = request(f"repos/{REPO}/commits/{sha}/check-runs?per_page=100").get("check_runs", [])
+    if len(checks) == 100:\n        return False, "check pagination not fully evaluated"
     statuses = request(f"repos/{REPO}/commits/{sha}/status").get("statuses", [])
     if not checks and not statuses:
         return False, "no CI checks observed"
