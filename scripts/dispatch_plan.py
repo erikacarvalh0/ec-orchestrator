@@ -10,13 +10,13 @@ ROOT = "https://api.github.com/repos/erikacarvalh0/ec-orchestrator/issues"
 DISPATCH = re.compile(r"(?m)^Backlog-ID: (ec-(?:finance|viagens|insurance):[a-z0-9-]+)$")
 
 
-def open_dispatch_areas():
-    """Existing open issues reserve their areas until reviewed or closed."""
+def dispatched_task_ids():
+    """Never requeue a task ID already dispatched, including closed issues."""
     token = os.environ["GITHUB_TOKEN"]
     blocked = set()
     for page in range(1, 11):
         request = urllib.request.Request(
-            f"{ROOT}?state=open&per_page=100&page={page}",
+            f"{ROOT}?state=all&per_page=100&page={page}",
             headers={
                 "Authorization": "Bearer " + token,
                 "Accept": "application/vnd.github+json",
@@ -41,7 +41,7 @@ def main():
     evidence = json.loads(Path("reports/github-sync.json").read_text())["projects"]
     if not ranking:
         raise RuntimeError("No ranked projects")
-    reserved = open_dispatch_areas()
+    reserved = dispatched_task_ids()
     # Legacy area-level dispatches are not valid task reservations.
     reserved = {key for key in reserved if re.search(r"--task-[0-9]{2}$", key)}
     backlog = json.loads(Path("config/backlog.json").read_text())
@@ -104,7 +104,7 @@ def main():
         "requires_acceptance_review": True,
         "status": "plan_only",
         "warning": (
-            "Estimates are provisional. Task dispatch issues reserve individual tasks; "
+            "Estimates are provisional. All historical task dispatch issues reserve individual tasks; "
             "open product PRs reserve areas until review and merge."
         ),
     }

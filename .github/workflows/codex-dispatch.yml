@@ -214,6 +214,7 @@ jobs:
           TARGET_REPO: ${{ needs.prepare.outputs.repository }}
           BRANCH: ${{ needs.prepare.outputs.branch }}
           AREA: ${{ needs.prepare.outputs.area }}
+          TASK_ID: ${{ needs.prepare.outputs.task_id }}
           ISSUE_URL: ${{ needs.prepare.outputs.issue_url }}
           PR_BASE: ${{ steps.dependency.outputs.base }}
           DEPENDENCY_PR: ${{ steps.dependency.outputs.dependency }}
@@ -232,7 +233,7 @@ jobs:
           git diff --cached --check
           git -c user.name='ec-orchestrator[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "feat: improve $AREA"
           git -c http.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)" push origin "HEAD:refs/heads/$BRANCH"
-          python /tmp/ec-build-product-pr.py --repo "$TARGET_REPO" --area "$AREA" --issue-url "$ISSUE_URL" --dependency "$DEPENDENCY_PR" --base "$PR_BASE" --output /tmp/ec-product-pr-body.md
+          python /tmp/ec-build-product-pr.py --repo "$TARGET_REPO" --area "$TASK_ID" --issue-url "$ISSUE_URL" --dependency "$DEPENDENCY_PR" --base "$PR_BASE" --output /tmp/ec-product-pr-body.md
           gh pr create -R "$TARGET_REPO" --base "$PR_BASE" --head "$BRANCH" --title "feat: improve $AREA" --body-file /tmp/ec-product-pr-body.md
 
   report:

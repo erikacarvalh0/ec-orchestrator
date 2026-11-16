@@ -37,6 +37,7 @@ out = os.environ["GITHUB_OUTPUT"]
 with open(out, "a") as f:
     f.write(f"repository=erikacarvalh0/{project}\n")
     f.write(f"area={area}\n")
-    f.write(f"branch=codex/dispatch-{number}-{area}\n")
+    f.write(f"task_id={task_id}\n")
+    f.write(f"branch=codex/dispatch-{number}-{task_id}\n")
     f.write(f"issue_url={issue['html_url']}\n")
 print(f"Validated issue {number}: {project}:{task_id}")
