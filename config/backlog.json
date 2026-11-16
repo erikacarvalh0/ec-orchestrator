@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "notes": "Initial area-level estimates are provisional, not verified against historical checklists. All areas require explicit acceptance evidence before completion.",
+  "projects": [
+    {
+      "repo": "erikacarvalh0/ec-finance",
+      "areas": [
+        {
+          "id": "infra-auth",
+          "name": "Infraestrutura e autenticação",
+          "remaining_pr_estimate": 3
+        },
+        {
+          "id": "expenses",
+          "name": "Despesas",
+          "remaining_pr_estimate": 3
+        },
+        {
+          "id": "investments",
+          "name": "Investimentos",
+          "remaining_pr_estimate": 4
+        },
+        {
+          "id": "reports",
+          "name": "Relatórios e dashboards",
+          "remaining_pr_estimate": 4
+        },
+        {
+          "id": "quality",
+          "name": "Testes e release",
+          "remaining_pr_estimate": 4
+        }
+      ]
+    },
+    {
+      "repo": "erikacarvalh0/ec-viagens",
+      "areas": [
+        {
+          "id": "infra-auth",
+          "name": "Infraestrutura e autenticação",
+          "remaining_pr_estimate": 3
+        },
+        {
+          "id": "itineraries",
+          "name": "Roteiros",
+          "remaining_pr_estimate": 4
+        },
+        {
+          "id": "bookings",
+          "name": "Reservas",
+          "remaining_pr_estimate": 4
+        },
+        {
+          "id": "budget",
+          "name": "Orçamento",
+          "remaining_pr_estimate": 3
+        },
+        {
+          "id": "quality",
+          "name": "Testes e release",
+          "remaining_pr_estimate": 4
+        }
+      ]
+    },
+    {
+      "repo": "erikacarvalh0/ec-insurance",
+      "areas": [
+        {
+          "id": "infra-auth",
+          "name": "Infraestrutura e autenticação",
+          "remaining_pr_estimate": 5
+        },
+        {
+          "id": "policies",
+          "name": "Apólices",
+          "remaining_pr_estimate": 6
+        },
+        {
+          "id": "claims",
+          "name": "Sinistros",
+          "remaining_pr_estimate": 7
+        },
+        {
+          "id": "billing",
+          "name": "Cobrança",
+          "remaining_pr_estimate": 5
+        },
+        {
+          "id": "quality",
+          "name": "Testes e release",
+          "remaining_pr_estimate": 7
+        }
+      ]
+    }
+  ]
+}
