@@ -93,7 +93,13 @@ jobs:
           # The action's API proxy runs as the GitHub runner, while Codex
           # executes as codexagent. Use a runner-writable shared Codex home
           # outside the agent-owned directory, with traversal for Codex.
-          sudo install -d -o runner -g runner -m 755 /home/runner/codex-shared
+          sudo install -d -o runner -g runner -m 700 /home/runner/codex-shared
+          # The action writes config.toml as runner after this step. Give only
+          # codexagent inherited ACL access; never make proxy config public.
+          command -v setfacl >/dev/null
+          sudo setfacl -m u:codexagent:rwx /home/runner/codex-shared
+          sudo setfacl -d -m u:codexagent:rwx /home/runner/codex-shared
+          sudo -u codexagent test -w /home/runner/codex-shared
           sudo install -d -o codexagent -g codexagent -m 700 /home/codexagent
           sudo chown -R codexagent:codexagent "$GITHUB_WORKSPACE"
           sudo chmod 755 /home/runner /home/runner/work /home/runner/work/ec-orchestrator
