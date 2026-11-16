@@ -1,300 +1,678 @@
 {
-  "version": 2,
-  "notes": "Provisional task-sized backlog; acceptance and remaining work must be verified against each product repository. Task IDs are independent dispatch units; no automatic product PR merge.",
+  "version": 3,
+  "notes": "Concrete v1.0 checklist gaps (16 Nov 2026). Tasks are scoped, independently reviewable and replace generic --task-01..07 entries. Older dispatches are historical; do not duplicate delivered work. External/deployment tasks require credentials, scope approval or real environments. PR merges remain manual.",
   "projects": [
+    {
+      "repo": "erikacarvalh0/ec-viagens",
+      "areas": [
+        {
+          "id": "infra-auth",
+          "name": "Identidade, autenticação e sessões",
+          "tasks": [
+            {
+              "id": "infra-auth--task-11",
+              "title": "Verificar e-mail de cadastro com token de uso único",
+              "scope": "Verificar e-mail de cadastro com token de uso único",
+              "acceptance": "Criar fluxo de envio e confirmação; impedir reuso e expiração indevida; cobrir falhas e autorização com testes.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "infra-auth--task-12",
+              "title": "Revisar expiração, revogação e proteção de sessões",
+              "scope": "Revisar expiração, revogação e proteção de sessões",
+              "acceptance": "Demonstrar revogação efetiva no servidor, expiração de sessão e respostas 401/403 com testes.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "infra-auth--task-13",
+              "title": "Cobrir cadastro, login, recuperação de senha e logout com E2E",
+              "scope": "Cobrir cadastro, login, recuperação de senha e logout com E2E",
+              "acceptance": "Adicionar jornadas Playwright reais em ambiente de teste isolado e executar localmente.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
+            }
+          ],
+          "remaining_pr_estimate": 3
+        },
+        {
+          "id": "trips",
+          "name": "Viagens, histórico e arquivamento",
+          "tasks": [
+            {
+              "id": "trips--task-11",
+              "title": "Cobrir ciclo completo de viagem com testes E2E",
+              "scope": "Cobrir ciclo completo de viagem com testes E2E",
+              "acceptance": "Criar, editar, pesquisar, arquivar, consultar histórico e excluir conforme regras; conferir persistência.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "trips--task-12",
+              "title": "Auditar autorização de todas as ações de viagens",
+              "scope": "Auditar autorização de todas as ações de viagens",
+              "acceptance": "Cobrir APIs e telas contra leitura/alteração não autorizada por participantes e usuários externos.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "trips--task-13",
+              "title": "Homologar histórico e arquivamento com múltiplos participantes",
+              "scope": "Homologar histórico e arquivamento com múltiplos participantes",
+              "acceptance": "Testar acesso anterior/posterior ao arquivamento e preservar vínculos e ações permitidas.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            }
+          ],
+          "remaining_pr_estimate": 3
+        },
+        {
+          "id": "members",
+          "name": "Participantes, convites e papéis",
+          "tasks": [
+            {
+              "id": "members--task-11",
+              "title": "Testar convites concorrentes e permissões integradas",
+              "scope": "Testar convites concorrentes e permissões integradas",
+              "acceptance": "Cobrir convite simultâneo, aceitação repetida, expiração, renovação e proteção do último administrador.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "members--task-12",
+              "title": "Validar acesso histórico após arquivamento",
+              "scope": "Validar acesso histórico após arquivamento",
+              "acceptance": "Garantir em testes integrados leitura de dados históricos por ex-participantes conforme regras previstas.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "members--task-13",
+              "title": "Revisar entrada, saída e troca de papéis de participantes",
+              "scope": "Revisar entrada, saída e troca de papéis de participantes",
+              "acceptance": "Cobrir transições autorizadas e inválidas e consistência da associação em API e interface.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            }
+          ],
+          "remaining_pr_estimate": 3
+        },
+        {
+          "id": "travel",
+          "name": "Transporte e caronas",
+          "tasks": [
+            {
+              "id": "travel--task-11",
+              "title": "Executar E2E de ofertas e coordenação de caronas",
+              "scope": "Executar E2E de ofertas e coordenação de caronas",
+              "acceptance": "Cobrir ida/retorno, oferta, interesse, filtros e coordenação entre duas contas.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "travel--task-12",
+              "title": "Restringir visibilidade dos contatos de caronas",
+              "scope": "Restringir visibilidade dos contatos de caronas",
+              "acceptance": "Comprovar que dados de contato não são expostos a não participantes nem por respostas de API.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            }
+          ],
+          "remaining_pr_estimate": 2
+        },
+        {
+          "id": "finance",
+          "name": "Cobranças, Asaas e conciliação",
+          "tasks": [
+            {
+              "id": "finance--task-11",
+              "title": "Implementar conciliação de cobranças com eventos e saldos Asaas",
+              "scope": "Implementar conciliação de cobranças com eventos e saldos Asaas",
+              "acceptance": "Comparar estado local e remoto, registrar divergências e permitir reconciliação idempotente; usar sandbox/mocks verificáveis.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "finance--task-12",
+              "title": "Tratar estornos, cancelamentos e webhooks fora de ordem",
+              "scope": "Tratar estornos, cancelamentos e webhooks fora de ordem",
+              "acceptance": "Cobrir estados, transições, duplicatas e eventos tardios com testes de regressão e rastreabilidade.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "finance--task-13",
+              "title": "Criar E2E de cobrança, retorno e webhook",
+              "scope": "Criar E2E de cobrança, retorno e webhook",
+              "acceptance": "Validar geração de cobrança, eventos e atualização na interface com provedor simulado em integração.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "finance--task-14",
+              "title": "Auditar trilha financeira de cobranças e conciliações",
+              "scope": "Auditar trilha financeira de cobranças e conciliações",
+              "acceptance": "Persistir ator/origem, referência externa, timestamp e mudanças sensíveis sem dados sigilosos.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            }
+          ],
+          "remaining_pr_estimate": 4
+        },
+        {
+          "id": "notifications",
+          "name": "Notificações e WhatsApp",
+          "tasks": [
+            {
+              "id": "notifications--task-11",
+              "title": "Homologar consentimento e entrega com provedor WhatsApp real",
+              "scope": "Homologar consentimento e entrega com provedor WhatsApp real",
+              "acceptance": "Executar testes supervisionados com credenciais de sandbox e evidências de consentimento/revogação, sem mensagens a usuários reais.",
+              "priority": "P0",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "notifications--task-12",
+              "title": "Garantir recuperação idempotente de envios incertos",
+              "scope": "Garantir recuperação idempotente de envios incertos",
+              "acceptance": "Persistir IDs e tentativas; evitar reenvio duplicado, recuperar falhas e cobrir cenário de timeout.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "notifications--task-13",
+              "title": "Adicionar observabilidade e alertas para falhas de notificações",
+              "scope": "Adicionar observabilidade e alertas para falhas de notificações",
+              "acceptance": "Registrar eventos estruturados sem PII e expor falhas, backlog da fila e critérios de alerta.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            }
+          ],
+          "remaining_pr_estimate": 3
+        },
+        {
+          "id": "gallery",
+          "name": "Galeria de fotos",
+          "tasks": [
+            {
+              "id": "gallery--task-11",
+              "title": "Implementar organização e permissões por álbuns",
+              "scope": "Implementar organização e permissões por álbuns",
+              "acceptance": "Criar, editar, mover fotos e listar álbuns sem romper controles privados da viagem.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "gallery--task-12",
+              "title": "Implementar exclusão e ações em lote de fotos, se aprovadas para v1.0",
+              "scope": "Implementar exclusão e ações em lote de fotos, se aprovadas para v1.0",
+              "acceptance": "Definir previamente regras de seleção/permissão e cobrir atomicidade e falhas parciais; não iniciar sem decisão de escopo.",
+              "priority": "P2",
+              "status": "optional_scope",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "gallery--task-13",
+              "title": "Garantir consistência entre metadados de fotos e storage",
+              "scope": "Garantir consistência entre metadados de fotos e storage",
+              "acceptance": "Cobrir compensação ou reconciliação de uploads/exclusões falhos, órfãos e idempotência.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "gallery--task-14",
+              "title": "Testar E2E de upload, acesso privado, download e exclusão",
+              "scope": "Testar E2E de upload, acesso privado, download e exclusão",
+              "acceptance": "Verificar imagens válidas/inválidas, múltiplos participantes e bloqueio de usuários externos.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            }
+          ],
+          "remaining_pr_estimate": 4
+        },
+        {
+          "id": "responsibilities",
+          "name": "Responsabilidades",
+          "tasks": [
+            {
+              "id": "responsibilities--task-11",
+              "title": "Testar atribuições e alterações de responsabilidades entre participantes",
+              "scope": "Testar atribuições e alterações de responsabilidades entre participantes",
+              "acceptance": "Cobrir delegação, alteração concorrente, autorização e atualização da interface com duas contas.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "responsibilities--task-12",
+              "title": "Revisar permissões e experiência de responsabilidades",
+              "scope": "Revisar permissões e experiência de responsabilidades",
+              "acceptance": "Validar respostas 403, estados vazios/erro, teclado, leitura e fluxo responsivo.",
+              "priority": "P2",
+              "status": "ready",
+              "allow_workflow_changes": false
+            }
+          ],
+          "remaining_pr_estimate": 2
+        },
+        {
+          "id": "platform",
+          "name": "Plataforma, LGPD e release",
+          "tasks": [
+            {
+              "id": "platform--task-11",
+              "title": "Integrar testes E2E críticos ao CI com PostgreSQL",
+              "scope": "Integrar testes E2E críticos ao CI com PostgreSQL",
+              "acceptance": "Garantir migração, isolamento, execução determinística e artifacts de falha sem secrets.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": true
+            },
+            {
+              "id": "platform--task-12",
+              "title": "Adicionar logs estruturados, métricas e alertas operacionais",
+              "scope": "Adicionar logs estruturados, métricas e alertas operacionais",
+              "acceptance": "Implementar IDs de correlação, logs sem PII e sinais para erros HTTP, filas e pagamentos.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "platform--task-13",
+              "title": "Preparar deploy de staging/produção e configuração de ambiente",
+              "scope": "Preparar deploy de staging/produção e configuração de ambiente",
+              "acceptance": "Documentar e configurar pipeline com aprovação humana, domínio/variáveis e rollback, sem executar deploy real sem acessos.",
+              "priority": "P0",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "platform--task-14",
+              "title": "Automatizar backup e verificar restauração PostgreSQL",
+              "scope": "Automatizar backup e verificar restauração PostgreSQL",
+              "acceptance": "Preparar job seguro e executar simulação de restore em banco de teste; produção requer acesso autorizado.",
+              "priority": "P0",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "platform--task-15",
+              "title": "Implementar retenção, exportação e exclusão de dados conforme LGPD",
+              "scope": "Implementar retenção, exportação e exclusão de dados conforme LGPD",
+              "acceptance": "Documentar bases de retenção e criar fluxo de exclusão auditável sem apagar registros fiscais obrigatórios.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "platform--task-16",
+              "title": "Homologar segurança, desempenho e recuperação de falhas da v1.0",
+              "scope": "Homologar segurança, desempenho e recuperação de falhas da v1.0",
+              "acceptance": "Executar matriz de testes de carga, limites, indisponibilidade de provedores e recuperação com evidências.",
+              "priority": "P0",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
+            }
+          ],
+          "remaining_pr_estimate": 6
+        }
+      ]
+    },
     {
       "repo": "erikacarvalh0/ec-finance",
       "areas": [
         {
           "id": "infra-auth",
           "name": "Infraestrutura e autenticação",
-          "remaining_pr_estimate": 3,
           "tasks": [
             {
-              "id": "infra-auth--task-01",
-              "title": "Infraestrutura e autenticação: Audit remaining gaps and implement one missing user-facing behavior",
-              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "infra-auth--task-11",
+              "title": "Validar login Google OAuth ponta a ponta",
+              "scope": "Validar login Google OAuth ponta a ponta",
+              "acceptance": "Cobrir OAuth com ambiente autorizado, sessões e logout; testes com provedor real quando credenciais disponíveis.",
+              "priority": "P0",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
             },
             {
-              "id": "infra-auth--task-02",
-              "title": "Infraestrutura e autenticação: Implement one remaining validation or error-handling flow",
-              "scope": "Implement one remaining validation or error-handling flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "infra-auth--task-12",
+              "title": "Configurar staging, domínio e deploy de produção",
+              "scope": "Configurar staging, domínio e deploy de produção",
+              "acceptance": "Preparar pipeline seguro, verificação de variáveis e rollback; produção depende de conta e domínio autorizados.",
+              "priority": "P0",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
             },
             {
-              "id": "infra-auth--task-03",
-              "title": "Infraestrutura e autenticação: Implement one remaining data/state integration flow",
-              "scope": "Implement one remaining data/state integration flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "infra-auth--task-13",
+              "title": "Instrumentar monitoramento de erros e alertas",
+              "scope": "Instrumentar monitoramento de erros e alertas",
+              "acceptance": "Registrar falhas estruturadas com correlação e sem dados bancários ou tokens.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "infra-auth--task-14",
+              "title": "Fortalecer CSP, HSTS, backups e recuperação",
+              "scope": "Fortalecer CSP, HSTS, backups e recuperação",
+              "acceptance": "Testar headers, política de produção e procedimento de restauração sem quebrar OAuth.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
             }
-          ]
+          ],
+          "remaining_pr_estimate": 4
         },
         {
           "id": "expenses",
-          "name": "Despesas",
-          "remaining_pr_estimate": 3,
+          "name": "Despesas e comprovantes",
           "tasks": [
             {
-              "id": "expenses--task-01",
-              "title": "Despesas: Audit remaining gaps and implement one missing user-facing behavior",
-              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "expenses--task-11",
+              "title": "Permitir anexar comprovantes às despesas",
+              "scope": "Permitir anexar comprovantes às despesas",
+              "acceptance": "Adicionar upload privado, autorização, tipos/tamanho, visualização e remoção com testes.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
             },
             {
-              "id": "expenses--task-02",
-              "title": "Despesas: Implement one remaining validation or error-handling flow",
-              "scope": "Implement one remaining validation or error-handling flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "expenses--task-12",
+              "title": "Melhorar reclassificação em massa das despesas",
+              "scope": "Melhorar reclassificação em massa das despesas",
+              "acceptance": "Criar seleção de transações, prévia, atualização em lote e proteção contra alterações parciais.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
             },
             {
-              "id": "expenses--task-03",
-              "title": "Despesas: Implement one remaining data/state integration flow",
-              "scope": "Implement one remaining data/state integration flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "expenses--task-13",
+              "title": "Conciliar despesas com transações bancárias reais",
+              "scope": "Conciliar despesas com transações bancárias reais",
+              "acceptance": "Vincular lançamentos importados às despesas, registrar conflitos e permitir correção idempotente.",
+              "priority": "P0",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
             }
-          ]
+          ],
+          "remaining_pr_estimate": 3
         },
         {
-          "id": "investments",
-          "name": "Investimentos",
-          "remaining_pr_estimate": 4,
+          "id": "income",
+          "name": "Receitas",
           "tasks": [
             {
-              "id": "investments--task-01",
-              "title": "Investimentos: Audit remaining gaps and implement one missing user-facing behavior",
-              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "income--task-11",
+              "title": "Conciliar receitas recorrentes e depósitos bancários",
+              "scope": "Conciliar receitas recorrentes e depósitos bancários",
+              "acceptance": "Associar entradas reais a receitas por critérios rastreáveis, sem duplicatas, com resolução de divergências.",
+              "priority": "P0",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
             },
             {
-              "id": "investments--task-02",
-              "title": "Investimentos: Implement one remaining validation or error-handling flow",
-              "scope": "Implement one remaining validation or error-handling flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "investments--task-03",
-              "title": "Investimentos: Implement one remaining data/state integration flow",
-              "scope": "Implement one remaining data/state integration flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "investments--task-04",
-              "title": "Investimentos: Add focused tests for uncovered behavior",
-              "scope": "Add focused tests for uncovered behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "income--task-12",
+              "title": "Adicionar E2E completo de receitas e recorrências",
+              "scope": "Adicionar E2E completo de receitas e recorrências",
+              "acceptance": "Cobrir criação, edição, encerramento, histórico, filtros e arquivamento em PostgreSQL de teste.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
             }
-          ]
+          ],
+          "remaining_pr_estimate": 2
         },
         {
-          "id": "reports",
-          "name": "Relatórios e dashboards",
-          "remaining_pr_estimate": 4,
+          "id": "cards",
+          "name": "Cartões e faturas",
           "tasks": [
             {
-              "id": "reports--task-01",
-              "title": "Relatórios e dashboards: Audit remaining gaps and implement one missing user-facing behavior",
-              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "cards--task-11",
+              "title": "Implementar juros, multas e encargos de faturas",
+              "scope": "Implementar juros, multas e encargos de faturas",
+              "acceptance": "Modelar cálculos em centavos, fechamento, atrasos e estornos com testes de datas-limite.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
             },
             {
-              "id": "reports--task-02",
-              "title": "Relatórios e dashboards: Implement one remaining validation or error-handling flow",
-              "scope": "Implement one remaining validation or error-handling flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "cards--task-12",
+              "title": "Integrar sincronização automática dos cartões",
+              "scope": "Integrar sincronização automática dos cartões",
+              "acceptance": "Sincronizar transações por provedor e consentimento com cursor/idempotência, sem inventar API real.",
+              "priority": "P0",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
             },
             {
-              "id": "reports--task-03",
-              "title": "Relatórios e dashboards: Implement one remaining data/state integration flow",
-              "scope": "Implement one remaining data/state integration flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "reports--task-04",
-              "title": "Relatórios e dashboards: Add focused tests for uncovered behavior",
-              "scope": "Add focused tests for uncovered behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "cards--task-13",
+              "title": "Ampliar E2E de pagamento e conciliação de faturas",
+              "scope": "Ampliar E2E de pagamento e conciliação de faturas",
+              "acceptance": "Cobrir pagamento parcial/total, créditos, fechamento, limite e importação duplicada.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
             }
-          ]
-        },
-        {
-          "id": "quality",
-          "name": "Testes e release",
-          "remaining_pr_estimate": 4,
-          "tasks": [
-            {
-              "id": "quality--task-01",
-              "title": "Testes e release: Audit remaining gaps and implement one missing user-facing behavior",
-              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "quality--task-02",
-              "title": "Testes e release: Implement one remaining validation or error-handling flow",
-              "scope": "Implement one remaining validation or error-handling flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "quality--task-03",
-              "title": "Testes e release: Implement one remaining data/state integration flow",
-              "scope": "Implement one remaining data/state integration flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "quality--task-04",
-              "title": "Testes e release: Add focused tests for uncovered behavior",
-              "scope": "Add focused tests for uncovered behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "repo": "erikacarvalh0/ec-viagens",
-      "areas": [
-        {
-          "id": "infra-auth",
-          "name": "Infraestrutura e autenticação",
-          "remaining_pr_estimate": 3,
-          "tasks": [
-            {
-              "id": "infra-auth--task-01",
-              "title": "Infraestrutura e autenticação: Audit remaining gaps and implement one missing user-facing behavior",
-              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "infra-auth--task-02",
-              "title": "Infraestrutura e autenticação: Implement one remaining validation or error-handling flow",
-              "scope": "Implement one remaining validation or error-handling flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "infra-auth--task-03",
-              "title": "Infraestrutura e autenticação: Implement one remaining data/state integration flow",
-              "scope": "Implement one remaining data/state integration flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            }
-          ]
-        },
-        {
-          "id": "itineraries",
-          "name": "Roteiros",
-          "remaining_pr_estimate": 4,
-          "tasks": [
-            {
-              "id": "itineraries--task-01",
-              "title": "Roteiros: Audit remaining gaps and implement one missing user-facing behavior",
-              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "itineraries--task-02",
-              "title": "Roteiros: Implement one remaining validation or error-handling flow",
-              "scope": "Implement one remaining validation or error-handling flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "itineraries--task-03",
-              "title": "Roteiros: Implement one remaining data/state integration flow",
-              "scope": "Implement one remaining data/state integration flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "itineraries--task-04",
-              "title": "Roteiros: Add focused tests for uncovered behavior",
-              "scope": "Add focused tests for uncovered behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            }
-          ]
-        },
-        {
-          "id": "bookings",
-          "name": "Reservas",
-          "remaining_pr_estimate": 4,
-          "tasks": [
-            {
-              "id": "bookings--task-01",
-              "title": "Reservas: Audit remaining gaps and implement one missing user-facing behavior",
-              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "bookings--task-02",
-              "title": "Reservas: Implement one remaining validation or error-handling flow",
-              "scope": "Implement one remaining validation or error-handling flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "bookings--task-03",
-              "title": "Reservas: Implement one remaining data/state integration flow",
-              "scope": "Implement one remaining data/state integration flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "bookings--task-04",
-              "title": "Reservas: Add focused tests for uncovered behavior",
-              "scope": "Add focused tests for uncovered behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            }
-          ]
+          ],
+          "remaining_pr_estimate": 3
         },
         {
           "id": "budget",
-          "name": "Orçamento",
-          "remaining_pr_estimate": 3,
+          "name": "Orçamentos e categorias",
           "tasks": [
             {
-              "id": "budget--task-01",
-              "title": "Orçamento: Audit remaining gaps and implement one missing user-facing behavior",
-              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "budget--task-11",
+              "title": "Persistir e aplicar rollover mensal de orçamentos",
+              "scope": "Persistir e aplicar rollover mensal de orçamentos",
+              "acceptance": "Transportar saldo elegível entre meses com configuração, limites e testes de repetição.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
             },
             {
-              "id": "budget--task-02",
-              "title": "Orçamento: Implement one remaining validation or error-handling flow",
-              "scope": "Implement one remaining validation or error-handling flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "budget--task-03",
-              "title": "Orçamento: Implement one remaining data/state integration flow",
-              "scope": "Implement one remaining data/state integration flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "budget--task-12",
+              "title": "Tratar despesas fixas e parcelas no cálculo de orçamentos",
+              "scope": "Tratar despesas fixas e parcelas no cálculo de orçamentos",
+              "acceptance": "Impedir contagem dupla, ajustar competência e testar mudanças de parcelas e categorias.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
             }
-          ]
+          ],
+          "remaining_pr_estimate": 2
         },
         {
-          "id": "quality",
-          "name": "Testes e release",
-          "remaining_pr_estimate": 4,
+          "id": "investments",
+          "name": "Investimentos e patrimônio",
           "tasks": [
             {
-              "id": "quality--task-01",
-              "title": "Testes e release: Audit remaining gaps and implement one missing user-facing behavior",
-              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "investments--task-11",
+              "title": "Comparar carteira com CDI, IPCA e benchmarks",
+              "scope": "Comparar carteira com CDI, IPCA e benchmarks",
+              "acceptance": "Implementar séries por período e origem confiável com fallback explícito e testes de datas.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
             },
             {
-              "id": "quality--task-02",
-              "title": "Testes e release: Implement one remaining validation or error-handling flow",
-              "scope": "Implement one remaining validation or error-handling flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "investments--task-12",
+              "title": "Calcular rentabilidade TWR e MWR com metodologia documentada",
+              "scope": "Calcular rentabilidade TWR e MWR com metodologia documentada",
+              "acceptance": "Incluir aportes/retiradas, datas e casos extremos; validar contra fixtures financeiros.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
             },
             {
-              "id": "quality--task-03",
-              "title": "Testes e release: Implement one remaining data/state integration flow",
-              "scope": "Implement one remaining data/state integration flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "investments--task-13",
+              "title": "Sincronizar posições reais de investimentos",
+              "scope": "Sincronizar posições reais de investimentos",
+              "acceptance": "Integrar provedor habilitado com reconciliação e idempotência, respeitando consentimento.",
+              "priority": "P0",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
             },
             {
-              "id": "quality--task-04",
-              "title": "Testes e release: Add focused tests for uncovered behavior",
-              "scope": "Add focused tests for uncovered behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "investments--task-14",
+              "title": "Consolidar patrimônio líquido com dívidas e financiamentos",
+              "scope": "Consolidar patrimônio líquido com dívidas e financiamentos",
+              "acceptance": "Combinar ativos, saldos, dívidas e amortizações sem duplicidades e com histórico mensal.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
             }
-          ]
+          ],
+          "remaining_pr_estimate": 4
+        },
+        {
+          "id": "forecasts",
+          "name": "Previsões e recorrências",
+          "tasks": [
+            {
+              "id": "forecasts--task-11",
+              "title": "Enviar notificações de vencimentos previstos e realizados",
+              "scope": "Enviar notificações de vencimentos previstos e realizados",
+              "acceptance": "Agendar avisos com opt-in, timezone e prevenção de notificações duplicadas.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "forecasts--task-12",
+              "title": "Comparar cenários financeiros e testar integração com faturas",
+              "scope": "Comparar cenários financeiros e testar integração com faturas",
+              "acceptance": "Permitir comparação lado a lado, explicitar premissas e cobrir projeção versus pagamento real.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            }
+          ],
+          "remaining_pr_estimate": 2
+        },
+        {
+          "id": "reports",
+          "name": "Dashboard e relatórios",
+          "tasks": [
+            {
+              "id": "reports--task-11",
+              "title": "Exportar relatórios financeiros em PDF",
+              "scope": "Exportar relatórios financeiros em PDF",
+              "acceptance": "Gerar relatórios com filtros e totais corretos, autorização e testes de conteúdo.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "reports--task-12",
+              "title": "Criar filtros avançados e relatórios personalizados",
+              "scope": "Criar filtros avançados e relatórios personalizados",
+              "acceptance": "Permitir períodos, categorias, contas, cartões e tipos de lançamento sem vazar dados.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "reports--task-13",
+              "title": "Remover dados fictícios do dashboard e validar consultas reais",
+              "scope": "Remover dados fictícios do dashboard e validar consultas reais",
+              "acceptance": "Comprovar que gráficos e totais vêm do banco do usuário, incluindo estado vazio e divergências.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
+            }
+          ],
+          "remaining_pr_estimate": 3
+        },
+        {
+          "id": "goals",
+          "name": "Metas financeiras",
+          "tasks": [
+            {
+              "id": "goals--task-11",
+              "title": "Associar investimentos automaticamente a metas",
+              "scope": "Associar investimentos automaticamente a metas",
+              "acceptance": "Vincular somente saldos autorizados e evitar contagem dupla com aportes manuais.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "goals--task-12",
+              "title": "Projetar prazo para atingir metas e simular contribuições",
+              "scope": "Projetar prazo para atingir metas e simular contribuições",
+              "acceptance": "Calcular com premissas explícitas, casos de retorno zero e testes de arredondamento.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            }
+          ],
+          "remaining_pr_estimate": 2
+        },
+        {
+          "id": "open-finance",
+          "name": "Open Finance real",
+          "tasks": [
+            {
+              "id": "open-finance--task-11",
+              "title": "Selecionar provedor e validar requisitos de integração Open Finance",
+              "scope": "Selecionar provedor e validar requisitos de integração Open Finance",
+              "acceptance": "Documentar escopos, credenciais, sandbox, limites, segurança e custos; configuração real depende de aprovação.",
+              "priority": "P0",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "open-finance--task-12",
+              "title": "Implementar consentimento, renovação e revogação Open Finance",
+              "scope": "Implementar consentimento, renovação e revogação Open Finance",
+              "acceptance": "Persistir estado e validade, bloquear sync após revogação e registrar consentimento com trilha auditável.",
+              "priority": "P0",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "open-finance--task-13",
+              "title": "Adicionar sincronização incremental e periódica de contas/cartões",
+              "scope": "Adicionar sincronização incremental e periódica de contas/cartões",
+              "acceptance": "Persistir cursor, lidar com paginação e duplicatas, operar em modo seguro quando provedor indisponível.",
+              "priority": "P0",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "open-finance--task-14",
+              "title": "Implementar reconexão, falhas e logs de auditoria de sincronizações",
+              "scope": "Implementar reconexão, falhas e logs de auditoria de sincronizações",
+              "acceptance": "Expor status ao usuário, reprocessamento seguro e auditoria sem tokens, CPF ou valores sensíveis em logs.",
+              "priority": "P0",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
+            }
+          ],
+          "remaining_pr_estimate": 4
         }
       ]
     },
@@ -302,219 +680,389 @@
       "repo": "erikacarvalh0/ec-insurance",
       "areas": [
         {
-          "id": "infra-auth",
-          "name": "Infraestrutura e autenticação",
-          "remaining_pr_estimate": 5,
+          "id": "infra-db",
+          "name": "Infraestrutura e banco de dados",
           "tasks": [
             {
-              "id": "infra-auth--task-01",
-              "title": "Infraestrutura e autenticação: Audit remaining gaps and implement one missing user-facing behavior",
-              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "infra-db--task-11",
+              "title": "Criar migration PostgreSQL de LeadStatusHistory",
+              "scope": "Criar migration PostgreSQL de LeadStatusHistory",
+              "acceptance": "Aplicar schema Prisma existente e conferir índices, FKs, rollback operacional e integridade.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
             },
             {
-              "id": "infra-auth--task-02",
-              "title": "Infraestrutura e autenticação: Implement one remaining validation or error-handling flow",
-              "scope": "Implement one remaining validation or error-handling flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "infra-db--task-12",
+              "title": "Validar migrações com PostgreSQL real e recuperação",
+              "scope": "Validar migrações com PostgreSQL real e recuperação",
+              "acceptance": "Executar banco limpo e upgrade em CI, documentar rollback e proteger dados históricos.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
             },
             {
-              "id": "infra-auth--task-03",
-              "title": "Infraestrutura e autenticação: Implement one remaining data/state integration flow",
-              "scope": "Implement one remaining data/state integration flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "infra-auth--task-04",
-              "title": "Infraestrutura e autenticação: Add focused tests for uncovered behavior",
-              "scope": "Add focused tests for uncovered behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "infra-auth--task-05",
-              "title": "Infraestrutura e autenticação: Improve accessibility and responsive behavior in the area",
-              "scope": "Improve accessibility and responsive behavior in the area",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "infra-db--task-13",
+              "title": "Preparar ambientes de staging e produção",
+              "scope": "Preparar ambientes de staging e produção",
+              "acceptance": "Definir configurações, migrações e deploy seguros; acesso e variáveis dependem do ambiente autorizado.",
+              "priority": "P1",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
             }
-          ]
+          ],
+          "remaining_pr_estimate": 3
         },
         {
-          "id": "policies",
-          "name": "Apólices",
-          "remaining_pr_estimate": 6,
+          "id": "auth",
+          "name": "Autenticação e segurança",
           "tasks": [
             {
-              "id": "policies--task-01",
-              "title": "Apólices: Audit remaining gaps and implement one missing user-facing behavior",
-              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "auth--task-11",
+              "title": "Implementar recuperação e redefinição segura de senha",
+              "scope": "Implementar recuperação e redefinição segura de senha",
+              "acceptance": "Tokens únicos, expiração, invalidação e proteção contra enumeração com testes.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
             },
             {
-              "id": "policies--task-02",
-              "title": "Apólices: Implement one remaining validation or error-handling flow",
-              "scope": "Implement one remaining validation or error-handling flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "auth--task-12",
+              "title": "Revogar sessões no servidor e expirar sessão ativa no frontend",
+              "scope": "Revogar sessões no servidor e expirar sessão ativa no frontend",
+              "acceptance": "Invalidar tokens após logout/reset, tratar refresh e expiração sem depender apenas de armazenamento local.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
             },
             {
-              "id": "policies--task-03",
-              "title": "Apólices: Implement one remaining data/state integration flow",
-              "scope": "Implement one remaining data/state integration flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "policies--task-04",
-              "title": "Apólices: Add focused tests for uncovered behavior",
-              "scope": "Add focused tests for uncovered behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "policies--task-05",
-              "title": "Apólices: Improve accessibility and responsive behavior in the area",
-              "scope": "Improve accessibility and responsive behavior in the area",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "policies--task-06",
-              "title": "Apólices: Address remaining edge cases with regression tests",
-              "scope": "Address remaining edge cases with regression tests",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "auth--task-13",
+              "title": "Auditar acessos e operações sensíveis",
+              "scope": "Auditar acessos e operações sensíveis",
+              "acceptance": "Registrar ator, recurso e ação sem senhas/tokens e permitir consulta restrita.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
             }
-          ]
+          ],
+          "remaining_pr_estimate": 3
         },
         {
-          "id": "claims",
-          "name": "Sinistros",
-          "remaining_pr_estimate": 7,
+          "id": "leads",
+          "name": "Captação pública de leads",
           "tasks": [
             {
-              "id": "claims--task-01",
-              "title": "Sinistros: Audit remaining gaps and implement one missing user-facing behavior",
-              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "claims--task-02",
-              "title": "Sinistros: Implement one remaining validation or error-handling flow",
-              "scope": "Implement one remaining validation or error-handling flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "claims--task-03",
-              "title": "Sinistros: Implement one remaining data/state integration flow",
-              "scope": "Implement one remaining data/state integration flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "claims--task-04",
-              "title": "Sinistros: Add focused tests for uncovered behavior",
-              "scope": "Add focused tests for uncovered behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "claims--task-05",
-              "title": "Sinistros: Improve accessibility and responsive behavior in the area",
-              "scope": "Improve accessibility and responsive behavior in the area",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "claims--task-06",
-              "title": "Sinistros: Address remaining edge cases with regression tests",
-              "scope": "Address remaining edge cases with regression tests",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "claims--task-07",
-              "title": "Sinistros: Complete a small documented integration improvement",
-              "scope": "Complete a small documented integration improvement",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "leads--task-11",
+              "title": "Validar captação real ponta a ponta",
+              "scope": "Validar captação real ponta a ponta",
+              "acceptance": "Testar formulário, persistência, idempotência e acesso do corretor em ambiente integrado.",
+              "priority": "P0",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
             }
-          ]
+          ],
+          "remaining_pr_estimate": 1
+        },
+        {
+          "id": "crm",
+          "name": "CRM e gerenciamento de leads",
+          "tasks": [
+            {
+              "id": "crm--task-11",
+              "title": "Persistir atualização transacional de status de lead",
+              "scope": "Persistir atualização transacional de status de lead",
+              "acceptance": "Implementar endpoint com validação de transições, autorização e inserção atômica de histórico.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "crm--task-12",
+              "title": "Expor histórico persistido de alterações de leads",
+              "scope": "Expor histórico persistido de alterações de leads",
+              "acceptance": "Criar API paginada e autorizada para consultar LeadStatusHistory com timestamps.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "crm--task-13",
+              "title": "Criar tela de detalhes e histórico do lead",
+              "scope": "Criar tela de detalhes e histórico do lead",
+              "acceptance": "Mostrar informações e ações autorizadas e lidar com estados de erro/carregamento.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "crm--task-14",
+              "title": "Implementar atribuição e reatribuição operacional de leads",
+              "scope": "Implementar atribuição e reatribuição operacional de leads",
+              "acceptance": "Aplicar papéis, auditar responsáveis e impedir atribuições fora do escopo.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "crm--task-15",
+              "title": "Integrar busca e filtros avançados de CRM à API",
+              "scope": "Integrar busca e filtros avançados de CRM à API",
+              "acceptance": "Filtrar por status, corretor e período com paginação e testes de isolamento.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            }
+          ],
+          "remaining_pr_estimate": 5
+        },
+        {
+          "id": "quotes",
+          "name": "Cotações e seguradoras",
+          "tasks": [
+            {
+              "id": "quotes--task-11",
+              "title": "Validar documentação e autorização oficial da WebSics",
+              "scope": "Validar documentação e autorização oficial da WebSics",
+              "acceptance": "Confirmar contratos, endpoints, credenciais e sandbox sem tratar cotações simuladas como reais.",
+              "priority": "P1",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "quotes--task-12",
+              "title": "Implementar adaptador para seguradoras reais",
+              "scope": "Implementar adaptador para seguradoras reais",
+              "acceptance": "Criar integração conforme contrato/sandbox aprovado, com timeout e proteção de credenciais.",
+              "priority": "P1",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "quotes--task-13",
+              "title": "Persistir resultados e estados das cotações",
+              "scope": "Persistir resultados e estados das cotações",
+              "acceptance": "Modelar versões, expiração, falhas e consulta por lead com isolamento entre corretores.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "quotes--task-14",
+              "title": "Criar consulta de propostas e coberturas no frontend",
+              "scope": "Criar consulta de propostas e coberturas no frontend",
+              "acceptance": "Diferenciar claramente propostas reais/simuladas e mostrar regras, valores e validade.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "quotes--task-15",
+              "title": "Testar contratos de integração de cotações em sandbox",
+              "scope": "Testar contratos de integração de cotações em sandbox",
+              "acceptance": "Cobrir erro, timeout, validade e payloads reais somente com sandbox autorizado.",
+              "priority": "P1",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
+            }
+          ],
+          "remaining_pr_estimate": 5
+        },
+        {
+          "id": "notifications",
+          "name": "Notificações",
+          "tasks": [
+            {
+              "id": "notifications--task-11",
+              "title": "Integrar provedor real de e-mail transacional",
+              "scope": "Integrar provedor real de e-mail transacional",
+              "acceptance": "Configurar adapter, tratamento de bounce, credenciais e envio apenas em sandbox autorizado.",
+              "priority": "P1",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "notifications--task-12",
+              "title": "Persistir fila e implementar retry/backoff de notificações",
+              "scope": "Persistir fila e implementar retry/backoff de notificações",
+              "acceptance": "Controlar idempotência, concorrência, falhas, dead-letter e recuperação após reinício.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "notifications--task-13",
+              "title": "Disparar notificações a partir de eventos de leads e cotações",
+              "scope": "Disparar notificações a partir de eventos de leads e cotações",
+              "acceptance": "Relacionar criação, atribuição, atualização e conclusão a templates e consentimentos.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            }
+          ],
+          "remaining_pr_estimate": 3
         },
         {
           "id": "billing",
-          "name": "Cobrança",
-          "remaining_pr_estimate": 5,
+          "name": "Financeiro e faturamento",
           "tasks": [
             {
-              "id": "billing--task-01",
-              "title": "Cobrança: Audit remaining gaps and implement one missing user-facing behavior",
-              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "billing--task-11",
+              "title": "Modelar faturas, pagamentos e transações em PostgreSQL",
+              "scope": "Modelar faturas, pagamentos e transações em PostgreSQL",
+              "acceptance": "Adicionar migrations, integridade em centavos, status e idempotência.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
             },
             {
-              "id": "billing--task-02",
-              "title": "Cobrança: Implement one remaining validation or error-handling flow",
-              "scope": "Implement one remaining validation or error-handling flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "billing--task-12",
+              "title": "Criar API de faturas e pagamentos",
+              "scope": "Criar API de faturas e pagamentos",
+              "acceptance": "Endpoints autenticados com autorização por papéis, validações e testes.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
             },
             {
-              "id": "billing--task-03",
-              "title": "Cobrança: Implement one remaining data/state integration flow",
-              "scope": "Implement one remaining data/state integration flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "billing--task-13",
+              "title": "Construir interface financeira de faturamento",
+              "scope": "Construir interface financeira de faturamento",
+              "acceptance": "Listar saldos, faturas, pagamentos e estados de erro no frontend.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
             },
             {
-              "id": "billing--task-04",
-              "title": "Cobrança: Add focused tests for uncovered behavior",
-              "scope": "Add focused tests for uncovered behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "billing--task-05",
-              "title": "Cobrança: Improve accessibility and responsive behavior in the area",
-              "scope": "Improve accessibility and responsive behavior in the area",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "billing--task-14",
+              "title": "Integrar cobrança ou conciliação conforme contrato comercial",
+              "scope": "Integrar cobrança ou conciliação conforme contrato comercial",
+              "acceptance": "Definir provedor e escopo, usar sandbox e nunca registrar cobrança real sem aprovação.",
+              "priority": "P2",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
             }
-          ]
+          ],
+          "remaining_pr_estimate": 4
+        },
+        {
+          "id": "frontend",
+          "name": "Frontend e experiência",
+          "tasks": [
+            {
+              "id": "frontend--task-11",
+              "title": "Melhorar responsividade e acessibilidade das jornadas",
+              "scope": "Melhorar responsividade e acessibilidade das jornadas",
+              "acceptance": "Revisar teclado, foco, labels e feedback em formulário, CRM e cotação; testar.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "frontend--task-12",
+              "title": "Concluir navegação, estados de erro e refinamento visual",
+              "scope": "Concluir navegação, estados de erro e refinamento visual",
+              "acceptance": "Padronizar feedback, loading, vazio, erros e navegação com Design System existente.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            }
+          ],
+          "remaining_pr_estimate": 2
         },
         {
           "id": "quality",
-          "name": "Testes e release",
-          "remaining_pr_estimate": 7,
+          "name": "Testes e qualidade",
           "tasks": [
             {
-              "id": "quality--task-01",
-              "title": "Testes e release: Audit remaining gaps and implement one missing user-facing behavior",
-              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "quality--task-11",
+              "title": "Criar E2E de captação até acompanhamento do lead",
+              "scope": "Criar E2E de captação até acompanhamento do lead",
+              "acceptance": "Cobrir captação, login, atribuição, status, histórico e notificação sem mocks de domínio.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
             },
             {
-              "id": "quality--task-02",
-              "title": "Testes e release: Implement one remaining validation or error-handling flow",
-              "scope": "Implement one remaining validation or error-handling flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "quality--task-12",
+              "title": "Adicionar testes integrados com PostgreSQL real",
+              "scope": "Adicionar testes integrados com PostgreSQL real",
+              "acceptance": "Testar transações, autorização, migration e isolamento entre corretores em CI.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
             },
             {
-              "id": "quality--task-03",
-              "title": "Testes e release: Implement one remaining data/state integration flow",
-              "scope": "Implement one remaining data/state integration flow",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "quality--task-04",
-              "title": "Testes e release: Add focused tests for uncovered behavior",
-              "scope": "Add focused tests for uncovered behavior",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "quality--task-05",
-              "title": "Testes e release: Improve accessibility and responsive behavior in the area",
-              "scope": "Improve accessibility and responsive behavior in the area",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "quality--task-06",
-              "title": "Testes e release: Address remaining edge cases with regression tests",
-              "scope": "Address remaining edge cases with regression tests",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
-            },
-            {
-              "id": "quality--task-07",
-              "title": "Testes e release: Complete a small documented integration improvement",
-              "scope": "Complete a small documented integration improvement",
-              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+              "id": "quality--task-13",
+              "title": "Automatizar verificações de segurança, acessibilidade e regressão",
+              "scope": "Automatizar verificações de segurança, acessibilidade e regressão",
+              "acceptance": "Adicionar checks de APIs, dependências e testes a11y focados nas jornadas críticas.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": true
             }
-          ]
+          ],
+          "remaining_pr_estimate": 3
+        },
+        {
+          "id": "platform",
+          "name": "Produção e observabilidade",
+          "tasks": [
+            {
+              "id": "platform--task-11",
+              "title": "Adicionar logging estruturado e correlação de requisições",
+              "scope": "Adicionar logging estruturado e correlação de requisições",
+              "acceptance": "Incluir request ID em API e logs, mascarar PII e testar propagação.",
+              "priority": "P0",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "platform--task-12",
+              "title": "Instrumentar métricas, monitoramento e alertas",
+              "scope": "Instrumentar métricas, monitoramento e alertas",
+              "acceptance": "Cobrir latência, taxa de erro, filas e integrações com alertas configuráveis.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "platform--task-13",
+              "title": "Criar pipeline seguro de staging e produção",
+              "scope": "Criar pipeline seguro de staging e produção",
+              "acceptance": "Exigir aprovação humana e secret store; configuração final depende de ambiente autorizado.",
+              "priority": "P1",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "platform--task-14",
+              "title": "Implementar política de secrets, backup e recuperação",
+              "scope": "Implementar política de secrets, backup e recuperação",
+              "acceptance": "Documentar rotação, retenção e testes de restore; execução de produção requer acesso.",
+              "priority": "P1",
+              "status": "blocked_external",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "platform--task-15",
+              "title": "Revisar segurança e LGPD dos dados de leads",
+              "scope": "Revisar segurança e LGPD dos dados de leads",
+              "acceptance": "Definir retenção, bases legais, exclusão auditável, autorização e proteção de PII.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            },
+            {
+              "id": "platform--task-16",
+              "title": "Documentar operações, incidentes e critérios de lançamento",
+              "scope": "Documentar operações, incidentes e critérios de lançamento",
+              "acceptance": "Criar runbooks de rollback, saúde, erros, backups e checklist de readiness.",
+              "priority": "P1",
+              "status": "ready",
+              "allow_workflow_changes": false
+            }
+          ],
+          "remaining_pr_estimate": 6
         }
       ]
     }
