@@ -9,7 +9,7 @@ from pathlib import Path
 REPO = "erikacarvalh0/ec-orchestrator"
 ROOT = "https://api.github.com/repos/"
 TOKEN = os.environ["GITHUB_TOKEN"]
-AREA_RE = re.compile(r"^ec-(finance|viagens|insurance):[a-z0-9-]+$")
+AREA_RE = re.compile(r"^ec-(finance|viagens|insurance):[a-z0-9-]+--task-[0-9]{2}$")
 
 
 def request(method, url, payload=None, token=None):
@@ -63,17 +63,18 @@ def main():
         target = lane["repository"]
         if not AREA_RE.fullmatch(key) or target != "erikacarvalh0/" + key.split(":")[0]:
             raise RuntimeError(f"Invalid lane metadata: {key} {target}")
-        # Do not create another PR while one is already open for this area.
+        # Do not create another PR while one is already open for this task or area.
         prs = pages(ROOT + target + "/pulls?state=open", os.environ["EC_BACKLOG_READ_TOKEN"])
         if any(
             key in (p.get("body") or "")
+            or lane["area_id"] in (p.get("body") or "")
             or (
                 p["head"]["ref"].startswith("codex/dispatch-")
                 and p["head"]["ref"].endswith("-" + key.split(":")[1])
             )
             for p in prs
         ):
-            print(f"Skipping {key}: existing product PR")
+            print(f"Skipping {key}: existing product PR for task/area")
             continue
         existing = [i for (area, _), i in dispatches.items() if area == key]
         if existing:
