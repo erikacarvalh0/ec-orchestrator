@@ -70,7 +70,7 @@ def main():
             or lane["area_id"] in (p.get("body") or "")
             or (
                 p["head"]["ref"].startswith("codex/dispatch-")
-                and p["head"]["ref"].endswith("-" + key.split(":")[1])
+                and ("-" + key.split(":")[1].split("--task-")[0] + "--task-") in p["head"]["ref"]
             )
             for p in prs
         ):
