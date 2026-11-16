@@ -40,7 +40,7 @@ def pages(url, token=TOKEN):
 
 def run():
     now = dt.datetime.now(dt.timezone.utc)
-    runs = pages(BASE + ORCH + "/actions/workflows/codex-dispatch.yml/runs")
+    runs = api("GET", BASE + ORCH + "/actions/workflows/codex-dispatch.yml/runs?per_page=100")["workflow_runs"]
     # Global fail-closed guard: no retry while any agent is queued/running.
     if any(r["status"] != "completed" for r in runs):
         print("Skipping retries: dispatch workflow currently active")
