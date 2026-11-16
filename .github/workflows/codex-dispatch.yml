@@ -86,22 +86,23 @@ jobs:
             echo 'Dispatch branch already exists; refusing duplicate run.'
             exit 1
           fi
-      - name: Create isolated non-sudo Codex user
+      - name: Prepare dedicated unprivileged Codex workspace
         run: |
+          set -euo pipefail
           sudo useradd --create-home --shell /bin/bash codexagent
+          # The action's API proxy runs as the GitHub runner, while Codex
+          # executes as codexagent. Use a runner-writable shared Codex home
+          # outside the agent-owned directory, with traversal for Codex.
+          sudo install -d -o runner -g runner -m 755 /home/runner/codex-shared
+          sudo install -d -o codexagent -g codexagent -m 700 /home/codexagent
           sudo chown -R codexagent:codexagent "$GITHUB_WORKSPACE"
           sudo chmod 755 /home/runner /home/runner/work /home/runner/work/ec-orchestrator
           sudo chmod 1777 /tmp
-          sudo install -d -o codexagent -g codexagent -m 700 /home/codexagent/.codex
-          sudo -u codexagent test -r "$GITHUB_WORKSPACE/README.md" || sudo -u codexagent test -r "$GITHUB_WORKSPACE/.git/HEAD"
+          sudo -u codexagent test -r "$GITHUB_WORKSPACE/.git/HEAD"
           sudo -u codexagent test -w "$GITHUB_WORKSPACE"
-          # The proxy launches under the runner account, while its server-info
-          # file lives in the dedicated Codex user's home. Permit traversal
-          # without exposing API credentials or world-readable home contents.
-          sudo chmod 711 /home/codexagent /home/codexagent/.codex
-          # Verify that the runner can create the proxy's server-info file.
-          test -x /home/codexagent/.codex
-          sudo -u codexagent test -w /home/codexagent/.codex
+          sudo -u codexagent test -x /home/runner/codex-shared
+          # A preflight check avoids retrying the agent on broken permissions.
+          sudo -u codexagent sh -c 'cd "$1" && test -w . && test -r .git/HEAD' _ "$GITHUB_WORKSPACE"
       - name: Inspect conventions and implement with Codex
         uses: openai/codex-action@v1
         with:
@@ -109,6 +110,7 @@ jobs:
           permission-profile: ':workspace'
           safety-strategy: unprivileged-user
           codex-user: codexagent
+          codex-home: /home/runner/codex-shared
           prompt: |
             Implement one small, independently reviewable improvement in area
             "${{ needs.prepare.outputs.area }}" of this repository.
