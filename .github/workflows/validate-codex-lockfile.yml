@@ -1,0 +1,27 @@
+name: Validate Codex bootstrap lockfile
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/codex-dispatch.yml'
+      - '.github/workflows/validate-codex-lockfile.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check generated lockfile is valid JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          script=$(sed -n '/^      - name: Prepare temporary npm lockfile before ownership transfer$/,/^      - name: Prepare dedicated unprivileged Codex workspace$/p' .github/workflows/codex-dispatch.yml | sed '1d;$d' | sed -n '/^        run: |$/,$p' | sed '1d;s/^          //')
+          test -n "$script"
+          work=$(mktemp -d)
+          cd "$work"
+          bash -euo pipefail -c "$script"
+          python3 -m json.tool package-lock.json >/dev/null
+          node -e 'const l=require(process.cwd()+"/package-lock.json");if(l.lockfileVersion!==3)process.exit(1)'
+          test -f /tmp/ec-generated-npm-lockfile
+          rm -f /tmp/ec-generated-npm-lockfile
