@@ -7,6 +7,9 @@ permissions:
   contents: read
   issues: write
   actions: write
+concurrency:
+  group: ec-backlog-sync
+  cancel-in-progress: false
 jobs:
   sync:
     runs-on: ubuntu-latest
@@ -25,7 +28,18 @@ jobs:
           python scripts/rank_backlog.py
           python scripts/reconcile_prs.py
           python scripts/dispatch_plan.py
+      - name: Retry one failed dispatch if safe
+        id: retry
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          EC_BACKLOG_READ_TOKEN: ${{ secrets.EC_BACKLOG_READ_TOKEN }}
+        run: |
+          python scripts/retry_failed_dispatches.py | tee /tmp/ec-retry.log
+          if grep -q '"retried_issue":' /tmp/ec-retry.log; then
+            echo 'retried=true' >> "$GITHUB_OUTPUT"
+          fi
       - name: Queue next dispatch task (orchestrator only)
+        if: ${{ steps.retry.outputs.retried != 'true' }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
           EC_BACKLOG_READ_TOKEN: ${{ secrets.EC_BACKLOG_READ_TOKEN }}
