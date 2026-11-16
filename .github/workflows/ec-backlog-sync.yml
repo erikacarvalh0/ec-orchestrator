@@ -1,8 +1,11 @@
-name: Sync EC backlogs (read only)
+name: Sync EC backlogs and dispatch
 on:
+  workflow_run:
+    workflows: ['Codex dispatch executor']
+    types: [completed]
   workflow_dispatch:
   schedule:
-    - cron: '17 * * * *'
+    - cron: '*/15 * * * *'
 permissions:
   contents: read
   issues: write
