@@ -93,7 +93,7 @@ jobs:
           # The action's API proxy runs as the GitHub runner, while Codex
           # executes as codexagent. Use a runner-writable shared Codex home
           # outside the agent-owned directory, with traversal for Codex.
-          sudo install -d -o runner -g runner -m 700 /home/runner/codex-shared
+          sudo install -d -o runner -g runner -m 700 /tmp/ec-codex-shared
           # The action writes config.toml as runner after this step. Give only
           # codexagent inherited ACL access; never make proxy config public.
           if ! command -v setfacl >/dev/null 2>&1; then
@@ -101,22 +101,21 @@ jobs:
             sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq acl
           fi
           command -v setfacl
-          sudo chmod 711 /home/runner
-          echo 'Checking runner home traversal'
-          sudo -u codexagent test -x /home/runner || { echo 'FAIL: codexagent cannot traverse /home/runner'; exit 1; }
-          sudo setfacl -m u:codexagent:rwx /home/runner/codex-shared
-          sudo setfacl -d -m u:codexagent:rwx /home/runner/codex-shared
+          echo 'Checking shared directory parent traversal'
+          sudo -u codexagent test -x /tmp || { echo 'FAIL: agent cannot traverse /tmp'; exit 1; }
+          sudo setfacl -m u:codexagent:rwx /tmp/ec-codex-shared
+          sudo setfacl -d -m u:codexagent:rwx /tmp/ec-codex-shared
           echo 'Checking shared Codex home ACL'
-          sudo getfacl -p /home/runner/codex-shared
-          sudo -u codexagent test -w /home/runner/codex-shared || { echo 'FAIL: codexagent cannot write shared Codex home'; exit 1; }
-          sudo -u codexagent sh -c 'touch /home/runner/codex-shared/.access-check && rm /home/runner/codex-shared/.access-check'
+          sudo getfacl -p /tmp/ec-codex-shared
+          sudo -u codexagent test -w /tmp/ec-codex-shared || { echo 'FAIL: codexagent cannot write shared Codex home in /tmp'; exit 1; }
+          sudo -u codexagent sh -c 'touch /tmp/ec-codex-shared/.access-check && rm /tmp/ec-codex-shared/.access-check'
           sudo install -d -o codexagent -g codexagent -m 700 /home/codexagent
           sudo chown -R codexagent:codexagent "$GITHUB_WORKSPACE"
           sudo chmod 755 /home/runner /home/runner/work /home/runner/work/ec-orchestrator
           sudo chmod 1777 /tmp
           sudo -u codexagent test -r "$GITHUB_WORKSPACE/.git/HEAD" || { echo 'FAIL: agent cannot read Git metadata'; exit 1; }
           sudo -u codexagent test -w "$GITHUB_WORKSPACE" || { echo 'FAIL: agent cannot write workspace'; exit 1; }
-          sudo -u codexagent test -x /home/runner/codex-shared || { echo 'FAIL: agent cannot traverse Codex home'; exit 1; }
+          sudo -u codexagent test -x /tmp/ec-codex-shared || { echo 'FAIL: agent cannot traverse Codex home'; exit 1; }
           # A preflight check avoids retrying the agent on broken permissions.
           sudo -u codexagent sh -c 'cd "$1" && test -w . && test -r .git/HEAD' _ "$GITHUB_WORKSPACE"
       - name: Inspect conventions and implement with Codex
@@ -126,7 +125,7 @@ jobs:
           permission-profile: ':workspace'
           safety-strategy: unprivileged-user
           codex-user: codexagent
-          codex-home: /home/runner/codex-shared
+          codex-home: /tmp/ec-codex-shared
           prompt: |
             Implement one small, independently reviewable improvement in area
             "${{ needs.prepare.outputs.area }}" of this repository.
