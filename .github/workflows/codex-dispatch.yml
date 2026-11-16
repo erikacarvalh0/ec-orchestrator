@@ -6,6 +6,10 @@ on:
         description: 'Open [EC-DISPATCH] issue in ec-orchestrator'
         required: true
         type: number
+      depends_on_pr:
+        description: 'Optional open upstream PR number in target product repo'
+        required: false
+        type: string
 permissions:
   contents: read
   issues: read
@@ -47,6 +51,27 @@ jobs:
           token: ${{ secrets.PRODUCT_REPOS_WRITE_TOKEN }}
           persist-credentials: false
           fetch-depth: 30
+      - name: Resolve upstream PR dependency
+        id: dependency
+        env:
+          GH_TOKEN: ${{ secrets.PRODUCT_REPOS_WRITE_TOKEN }}
+          TARGET_REPO: ${{ needs.prepare.outputs.repository }}
+          DEPENDS_ON_PR: ${{ inputs.depends_on_pr }}
+        run: |
+          set -euo pipefail
+          if [ -z "$DEPENDS_ON_PR" ]; then
+            echo 'base=main' >> "$GITHUB_OUTPUT"
+            echo 'dependency=none' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          [[ "$DEPENDS_ON_PR" =~ ^[1-9][0-9]*$ ]] || exit 1
+          [ "$(gh pr view "$DEPENDS_ON_PR" -R "$TARGET_REPO" --json state --jq .state)" = OPEN ] || exit 1
+          [ "$(gh pr view "$DEPENDS_ON_PR" -R "$TARGET_REPO" --json headRepository --jq .headRepository.nameWithOwner)" = "$TARGET_REPO" ] || exit 1
+          base=$(gh pr view "$DEPENDS_ON_PR" -R "$TARGET_REPO" --json headRefName --jq .headRefName)
+          git fetch origin "refs/heads/$base:refs/remotes/origin/$base"
+          git switch --detach "origin/$base"
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+          echo "dependency=$DEPENDS_ON_PR" >> "$GITHUB_OUTPUT"
       - name: Check for existing dispatch PR
         env:
           GH_TOKEN: ${{ secrets.PRODUCT_REPOS_WRITE_TOKEN }}
@@ -85,6 +110,8 @@ jobs:
           BRANCH: ${{ needs.prepare.outputs.branch }}
           AREA: ${{ needs.prepare.outputs.area }}
           ISSUE_URL: ${{ needs.prepare.outputs.issue_url }}
+          PR_BASE: ${{ steps.dependency.outputs.base }}
+          DEPENDENCY_PR: ${{ steps.dependency.outputs.dependency }}
         run: |
           set -euo pipefail
           if [ -z "$(git status --porcelain)" ]; then
@@ -100,4 +127,9 @@ jobs:
           git diff --cached --check
           git -c user.name='ec-orchestrator[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "feat: improve $AREA"
           git -c http.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)" push origin "HEAD:refs/heads/$BRANCH"
-          gh pr create -R "$TARGET_REPO" --base main --head "$BRANCH" --title "feat: improve $AREA" --body "Automated Codex proposal for $ISSUE_URL. Requires human review and merge. Verify tests and repository conventions before approval."
+          if [ "$DEPENDENCY_PR" = none ]; then
+            dependency_text="Dependencies: none"
+          else
+            dependency_text="Depends on: #$DEPENDENCY_PR. Merge upstream PR first, then retarget this PR to main and re-run CI. Current stacked base: $PR_BASE."
+          fi
+          gh pr create -R "$TARGET_REPO" --base "$PR_BASE" --head "$BRANCH" --title "feat: improve $AREA" --body "$(printf 'Automated Codex proposal for %s.\n\n%s\n\nRequires human review and merge.\n' "$ISSUE_URL" "$dependency_text")"
