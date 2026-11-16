@@ -1,0 +1,33 @@
+name: Audit dispatch issues and reconciliation
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '7,37 * * * *'
+permissions:
+  contents: read
+  issues: read
+concurrency:
+  group: ec-dispatch-audit
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate audit script
+        run: python -m py_compile scripts/audit_dispatch_issues.py
+      - name: Audit all dispatch issues and product PRs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          EC_BACKLOG_READ_TOKEN: ${{ secrets.EC_BACKLOG_READ_TOKEN }}
+          STALE_HOURS: '24'
+        run: python scripts/audit_dispatch_issues.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ec-dispatch-audit
+          path: reports/dispatch-audit.json
+          retention-days: 30
