@@ -96,10 +96,17 @@ jobs:
           sudo install -d -o runner -g runner -m 700 /home/runner/codex-shared
           # The action writes config.toml as runner after this step. Give only
           # codexagent inherited ACL access; never make proxy config public.
-          command -v setfacl >/dev/null
+          if ! command -v setfacl >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq acl
+          fi
+          command -v setfacl
+          sudo chmod 711 /home/runner
+          sudo -u codexagent test -x /home/runner
           sudo setfacl -m u:codexagent:rwx /home/runner/codex-shared
           sudo setfacl -d -m u:codexagent:rwx /home/runner/codex-shared
           sudo -u codexagent test -w /home/runner/codex-shared
+          sudo -u codexagent sh -c 'touch /home/runner/codex-shared/.access-check && rm /home/runner/codex-shared/.access-check'
           sudo install -d -o codexagent -g codexagent -m 700 /home/codexagent
           sudo chown -R codexagent:codexagent "$GITHUB_WORKSPACE"
           sudo chmod 755 /home/runner /home/runner/work /home/runner/work/ec-orchestrator
