@@ -152,13 +152,13 @@ jobs:
           # proxy configuration even when CODEX_HOME is stripped.
           sudo -u codexagent ln -sfn /tmp/ec-codex-shared /home/codexagent/.codex
           sudo -u codexagent sh -c 'cat "$HOME/.codex/config.toml" >/dev/null' || { echo 'FAIL: default Codex config inaccessible'; exit 1; }
-          sudo -u codexagent grep -Fqx 'model_provider = "codex-action-responses-proxy"' /home/codexagent/.codex/config.toml || { echo 'FAIL: default Codex provider is not proxy'; exit 1; }
+          if sudo -u codexagent env | grep -q '^CODEX_HOME='; then
             echo 'Codex sudo environment retains CODEX_HOME'
           else
             echo 'Codex sudo environment drops CODEX_HOME; default ~/.codex symlink configured'
           fi
           # Check only provider name, never print the configuration or credentials.
-          sudo -u codexagent sh -c 'grep -q "^model_provider = \"codex-action-responses-proxy\"" "$HOME/.codex/config.toml"' || { echo 'FAIL: default Codex provider is not proxy'; exit 1; }
+          sudo -u codexagent grep -Fqx 'model_provider = "codex-action-responses-proxy"' /home/codexagent/.codex/config.toml || { echo 'FAIL: default Codex provider is not proxy'; exit 1; }
           # Do not print the config; it may contain sensitive settings.
       - name: Inspect conventions and implement with Codex
         uses: openai/codex-action@v1
