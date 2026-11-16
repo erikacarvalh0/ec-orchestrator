@@ -141,7 +141,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ ! -f package-lock.json ] && [ ! -f npm-shrinkwrap.json ] && [ ! -f yarn.lock ]; then
-            printf '%s\\n' '{"name":"ec-codex-bootstrap","lockfileVersion":3,"requires":true,"packages":{}}' > package-lock.json
+            printf '%s\n' '{"name":"ec-codex-bootstrap","lockfileVersion":3,"requires":true,"packages":{}}' | sudo -u codexagent tee package-lock.json >/dev/null
             touch /tmp/ec-generated-npm-lockfile
           fi
       - name: Bootstrap Codex proxy without running agent
@@ -192,7 +192,7 @@ jobs:
         if: always()
         run: |
           if [ -f /tmp/ec-generated-npm-lockfile ]; then
-            rm -f package-lock.json
+            sudo rm -f package-lock.json
           fi
       - name: Restore workspace ownership
         if: always()
