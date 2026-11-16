@@ -210,3 +210,43 @@ jobs:
           git -c http.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)" push origin "HEAD:refs/heads/$BRANCH"
           python /tmp/ec-build-product-pr.py --repo "$TARGET_REPO" --area "$AREA" --issue-url "$ISSUE_URL" --dependency "$DEPENDENCY_PR" --base "$PR_BASE" --output /tmp/ec-product-pr-body.md
           gh pr create -R "$TARGET_REPO" --base "$PR_BASE" --head "$BRANCH" --title "feat: improve $AREA" --body-file /tmp/ec-product-pr-body.md
+
+  report:
+    if: ${{ always() }}
+    needs: [prepare, implement]
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      actions: read
+    steps:
+      - name: Record dispatch result on its issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ inputs.issue_number }}
+          PREPARE_RESULT: ${{ needs.prepare.result }}
+          IMPLEMENT_RESULT: ${{ needs.implement.result }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
+          REPOSITORY: ${{ needs.prepare.outputs.repository }}
+          BRANCH: ${{ needs.prepare.outputs.branch }}
+        run: |
+          set -euo pipefail
+          [[ "$ISSUE_NUMBER" =~ ^[1-9][0-9]*$ ]] || exit 1
+          issue_title=$(gh issue view "$ISSUE_NUMBER" -R "$GITHUB_REPOSITORY" --json title --jq .title)
+          [[ "$issue_title" == '[EC-DISPATCH] '* ]] || { echo "Not a dispatch issue"; exit 1; }
+          status="failed"
+          detail="Inspect the workflow logs and retry manually after fixing the cause."
+          if [ "$PREPARE_RESULT" = success ] && [ "$IMPLEMENT_RESULT" = success ]; then
+            status="pr_created"
+            detail="Executor completed; review the product PR before merging."
+          fi
+          {
+            printf '### Dispatch status: %s\n\n' "$status"
+            printf -- '- Workflow run: %s\n' "$RUN_URL"
+            printf -- '- Prepare: %s\n' "$PREPARE_RESULT"
+            printf -- '- Implement: %s\n' "$IMPLEMENT_RESULT"
+            printf -- '- Product: %s\n' "$REPOSITORY"
+            printf -- '- Branch: %s\n\n' "$BRANCH"
+            printf '%s\n' "$detail"
+            printf '\nProduct PRs always require manual review and merge.\n'
+          } > /tmp/ec-dispatch-status.md
+          gh issue comment "$ISSUE_NUMBER" -R "$GITHUB_REPOSITORY" --body-file /tmp/ec-dispatch-status.md
