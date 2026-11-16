@@ -91,6 +91,7 @@ jobs:
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           permission-profile: ':workspace'
+          safety-strategy: unprivileged-user
           prompt: |
             Implement one small, independently reviewable improvement in area
             "${{ needs.prepare.outputs.area }}" of this repository.
