@@ -6,6 +6,7 @@ on:
       - 'scripts/dispatch_plan.py'
       - 'scripts/queue_dispatch_issue.py'
       - 'scripts/resolve_dispatch.py'
+      - 'scripts/retry_failed_dispatches.py'
       - '.github/workflows/codex-dispatch.yml'
       - '.github/workflows/validate-granular-backlog.yml'
   workflow_dispatch:
@@ -22,16 +23,21 @@ jobs:
       - name: Validate syntax and unique task IDs
         run: |
           set -euo pipefail
-          python -m py_compile scripts/dispatch_plan.py scripts/queue_dispatch_issue.py scripts/resolve_dispatch.py
+          python -m py_compile scripts/dispatch_plan.py scripts/queue_dispatch_issue.py scripts/resolve_dispatch.py scripts/retry_failed_dispatches.py
           python - <<'PY'
           import json, re
           b=json.load(open("config/backlog.json"))
-          assert b["version"] == 2
+          assert b["version"] == 3
+          assert len(b["projects"]) == 3
           keys=set()
           for p in b["projects"]:
               for a in p["areas"]:
                   assert len(a["tasks"]) == a["remaining_pr_estimate"]
                   for t in a["tasks"]:
+                      assert t["status"] in ("ready", "blocked_external", "optional_scope")
+                      assert t["priority"] in ("P0", "P1", "P2")
+                      assert isinstance(t["allow_workflow_changes"], bool)
+                      assert not re.search(r"--task-0[1-7]$", t["id"])
                       key=p["repo"].split("/")[-1]+":"+t["id"]
                       assert key not in keys and re.fullmatch(r"ec-(finance|viagens|insurance):[a-z0-9-]+--task-[0-9]{2}",key),key
                       assert t["scope"] and t["acceptance"]
