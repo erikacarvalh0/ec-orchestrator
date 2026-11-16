@@ -1,0 +1,40 @@
+name: Validate granular backlog
+on:
+  pull_request:
+    paths:
+      - 'config/backlog.json'
+      - 'scripts/dispatch_plan.py'
+      - 'scripts/queue_dispatch_issue.py'
+      - 'scripts/resolve_dispatch.py'
+      - '.github/workflows/codex-dispatch.yml'
+      - '.github/workflows/validate-granular-backlog.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate syntax and unique task IDs
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/dispatch_plan.py scripts/queue_dispatch_issue.py scripts/resolve_dispatch.py
+          python - <<'PY'
+          import json, re
+          b=json.load(open("config/backlog.json"))
+          assert b["version"] == 2
+          keys=set()
+          for p in b["projects"]:
+              for a in p["areas"]:
+                  assert len(a["tasks"]) == a["remaining_pr_estimate"]
+                  for t in a["tasks"]:
+                      key=p["repo"].split("/")[-1]+":"+t["id"]
+                      assert key not in keys and re.fullmatch(r"ec-(finance|viagens|insurance):[a-z0-9-]+--task-[0-9]{2}",key),key
+                      assert t["scope"] and t["acceptance"]
+                      keys.add(key)
+          print("Validated",len(keys),"task IDs")
+          PY

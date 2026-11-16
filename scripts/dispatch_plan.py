@@ -42,37 +42,53 @@ def main():
     if not ranking:
         raise RuntimeError("No ranked projects")
     reserved = open_dispatch_areas()
+    backlog = json.loads(Path("config/backlog.json").read_text())
+    task_areas = {p["repo"]: {a["id"]: a for a in p["areas"]} for p in backlog["projects"]}
     projects = sorted(ranking, key=lambda p: (p["remaining_pr_estimate"], p["repo"]))
     lanes = []
     for project in projects:
         repo = project["repo"]
         open_prs = evidence[repo]["open_prs"]
 
-        def available(area):
+        candidates = []
+        for area in project["areas"]:
             key = area["id"]
-            suffix = "-" + key.split(":", 1)[1]
-            return (
-                not area["accepted"]
-                and area["remaining_pr_estimate"] > 0
-                and key not in reserved
-                and not any(
-                    key in pr["backlog_ids"]
-                    or (pr.get("branch", "").startswith("codex/dispatch-")
-                        and pr["branch"].endswith(suffix))
-                    for pr in open_prs
-                )
-            )
-
-        candidates = sorted(
-            (area for area in project["areas"] if available(area)),
-            key=lambda area: (area["remaining_pr_estimate"], area["id"]),
-        )
+            if area["accepted"] or area["remaining_pr_estimate"] <= 0:
+                continue
+            # One open PR per area avoids conflicting parallel changes, but
+            # merged PRs and old dispatch issues do not block the next task.
+            if any(
+                key in pr["backlog_ids"]
+                or (pr.get("branch", "").startswith("codex/dispatch-")
+                    and (pr["branch"].endswith("-" + key.split(":", 1)[1])
+                         or ("-" + key.split(":", 1)[1] + "--task-") in pr["branch"]))
+                for pr in open_prs
+            ):
+                continue
+            definition = task_areas[repo][key.split(":", 1)[1]]
+            for task in definition["tasks"]:
+                task_key = repo.split("/")[1] + ":" + task["id"]
+                # A dispatch issue reserves only its task, never the area.
+                if task_key in reserved:
+                    continue
+                # Do not create another task in an area while a previous task
+                # remains open, unless it has an existing product PR.
+                # This keeps implementation sequential within each area.
+                candidates.append((area, task, task_key))
+                break
         if not candidates:
             continue
+        area, task, task_key = sorted(
+            candidates, key=lambda entry: (entry[0]["remaining_pr_estimate"], entry[2])
+        )[0]
         lanes.append({
             "lane": len(lanes) + 1,
             "repository": repo,
-            "backlog_id": candidates[0]["id"],
+            "backlog_id": task_key,
+            "area_id": area["id"],
+            "task_title": task["title"],
+            "task_scope": task["scope"],
+            "task_acceptance": task["acceptance"],
             "action": "queue_and_dispatch",
             "requires_manual_pr_merge": True,
         })
@@ -86,8 +102,8 @@ def main():
         "requires_acceptance_review": True,
         "status": "plan_only",
         "warning": (
-            "Estimates are provisional. Open dispatch issues reserve their areas; "
-            "review and close them before dispatching more work in that area."
+            "Estimates are provisional. Task dispatch issues reserve individual tasks; "
+            "open product PRs reserve areas until review and merge."
         ),
     }
     Path("reports/dispatch-plan.json").write_text(

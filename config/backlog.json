@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "notes": "Initial area-level estimates are provisional, not verified against historical checklists. All areas require explicit acceptance evidence before completion.",
+  "version": 2,
+  "notes": "Provisional task-sized backlog; acceptance and remaining work must be verified against each product repository. Task IDs are independent dispatch units; no automatic product PR merge.",
   "projects": [
     {
       "repo": "erikacarvalh0/ec-finance",
@@ -8,27 +8,145 @@
         {
           "id": "infra-auth",
           "name": "Infraestrutura e autenticação",
-          "remaining_pr_estimate": 3
+          "remaining_pr_estimate": 3,
+          "tasks": [
+            {
+              "id": "infra-auth--task-01",
+              "title": "Infraestrutura e autenticação: Audit remaining gaps and implement one missing user-facing behavior",
+              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "infra-auth--task-02",
+              "title": "Infraestrutura e autenticação: Implement one remaining validation or error-handling flow",
+              "scope": "Implement one remaining validation or error-handling flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "infra-auth--task-03",
+              "title": "Infraestrutura e autenticação: Implement one remaining data/state integration flow",
+              "scope": "Implement one remaining data/state integration flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            }
+          ]
         },
         {
           "id": "expenses",
           "name": "Despesas",
-          "remaining_pr_estimate": 3
+          "remaining_pr_estimate": 3,
+          "tasks": [
+            {
+              "id": "expenses--task-01",
+              "title": "Despesas: Audit remaining gaps and implement one missing user-facing behavior",
+              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "expenses--task-02",
+              "title": "Despesas: Implement one remaining validation or error-handling flow",
+              "scope": "Implement one remaining validation or error-handling flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "expenses--task-03",
+              "title": "Despesas: Implement one remaining data/state integration flow",
+              "scope": "Implement one remaining data/state integration flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            }
+          ]
         },
         {
           "id": "investments",
           "name": "Investimentos",
-          "remaining_pr_estimate": 4
+          "remaining_pr_estimate": 4,
+          "tasks": [
+            {
+              "id": "investments--task-01",
+              "title": "Investimentos: Audit remaining gaps and implement one missing user-facing behavior",
+              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "investments--task-02",
+              "title": "Investimentos: Implement one remaining validation or error-handling flow",
+              "scope": "Implement one remaining validation or error-handling flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "investments--task-03",
+              "title": "Investimentos: Implement one remaining data/state integration flow",
+              "scope": "Implement one remaining data/state integration flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "investments--task-04",
+              "title": "Investimentos: Add focused tests for uncovered behavior",
+              "scope": "Add focused tests for uncovered behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            }
+          ]
         },
         {
           "id": "reports",
           "name": "Relatórios e dashboards",
-          "remaining_pr_estimate": 4
+          "remaining_pr_estimate": 4,
+          "tasks": [
+            {
+              "id": "reports--task-01",
+              "title": "Relatórios e dashboards: Audit remaining gaps and implement one missing user-facing behavior",
+              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "reports--task-02",
+              "title": "Relatórios e dashboards: Implement one remaining validation or error-handling flow",
+              "scope": "Implement one remaining validation or error-handling flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "reports--task-03",
+              "title": "Relatórios e dashboards: Implement one remaining data/state integration flow",
+              "scope": "Implement one remaining data/state integration flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "reports--task-04",
+              "title": "Relatórios e dashboards: Add focused tests for uncovered behavior",
+              "scope": "Add focused tests for uncovered behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            }
+          ]
         },
         {
           "id": "quality",
           "name": "Testes e release",
-          "remaining_pr_estimate": 4
+          "remaining_pr_estimate": 4,
+          "tasks": [
+            {
+              "id": "quality--task-01",
+              "title": "Testes e release: Audit remaining gaps and implement one missing user-facing behavior",
+              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "quality--task-02",
+              "title": "Testes e release: Implement one remaining validation or error-handling flow",
+              "scope": "Implement one remaining validation or error-handling flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "quality--task-03",
+              "title": "Testes e release: Implement one remaining data/state integration flow",
+              "scope": "Implement one remaining data/state integration flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "quality--task-04",
+              "title": "Testes e release: Add focused tests for uncovered behavior",
+              "scope": "Add focused tests for uncovered behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            }
+          ]
         }
       ]
     },
@@ -38,27 +156,145 @@
         {
           "id": "infra-auth",
           "name": "Infraestrutura e autenticação",
-          "remaining_pr_estimate": 3
+          "remaining_pr_estimate": 3,
+          "tasks": [
+            {
+              "id": "infra-auth--task-01",
+              "title": "Infraestrutura e autenticação: Audit remaining gaps and implement one missing user-facing behavior",
+              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "infra-auth--task-02",
+              "title": "Infraestrutura e autenticação: Implement one remaining validation or error-handling flow",
+              "scope": "Implement one remaining validation or error-handling flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "infra-auth--task-03",
+              "title": "Infraestrutura e autenticação: Implement one remaining data/state integration flow",
+              "scope": "Implement one remaining data/state integration flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            }
+          ]
         },
         {
           "id": "itineraries",
           "name": "Roteiros",
-          "remaining_pr_estimate": 4
+          "remaining_pr_estimate": 4,
+          "tasks": [
+            {
+              "id": "itineraries--task-01",
+              "title": "Roteiros: Audit remaining gaps and implement one missing user-facing behavior",
+              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "itineraries--task-02",
+              "title": "Roteiros: Implement one remaining validation or error-handling flow",
+              "scope": "Implement one remaining validation or error-handling flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "itineraries--task-03",
+              "title": "Roteiros: Implement one remaining data/state integration flow",
+              "scope": "Implement one remaining data/state integration flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "itineraries--task-04",
+              "title": "Roteiros: Add focused tests for uncovered behavior",
+              "scope": "Add focused tests for uncovered behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            }
+          ]
         },
         {
           "id": "bookings",
           "name": "Reservas",
-          "remaining_pr_estimate": 4
+          "remaining_pr_estimate": 4,
+          "tasks": [
+            {
+              "id": "bookings--task-01",
+              "title": "Reservas: Audit remaining gaps and implement one missing user-facing behavior",
+              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "bookings--task-02",
+              "title": "Reservas: Implement one remaining validation or error-handling flow",
+              "scope": "Implement one remaining validation or error-handling flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "bookings--task-03",
+              "title": "Reservas: Implement one remaining data/state integration flow",
+              "scope": "Implement one remaining data/state integration flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "bookings--task-04",
+              "title": "Reservas: Add focused tests for uncovered behavior",
+              "scope": "Add focused tests for uncovered behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            }
+          ]
         },
         {
           "id": "budget",
           "name": "Orçamento",
-          "remaining_pr_estimate": 3
+          "remaining_pr_estimate": 3,
+          "tasks": [
+            {
+              "id": "budget--task-01",
+              "title": "Orçamento: Audit remaining gaps and implement one missing user-facing behavior",
+              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "budget--task-02",
+              "title": "Orçamento: Implement one remaining validation or error-handling flow",
+              "scope": "Implement one remaining validation or error-handling flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "budget--task-03",
+              "title": "Orçamento: Implement one remaining data/state integration flow",
+              "scope": "Implement one remaining data/state integration flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            }
+          ]
         },
         {
           "id": "quality",
           "name": "Testes e release",
-          "remaining_pr_estimate": 4
+          "remaining_pr_estimate": 4,
+          "tasks": [
+            {
+              "id": "quality--task-01",
+              "title": "Testes e release: Audit remaining gaps and implement one missing user-facing behavior",
+              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "quality--task-02",
+              "title": "Testes e release: Implement one remaining validation or error-handling flow",
+              "scope": "Implement one remaining validation or error-handling flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "quality--task-03",
+              "title": "Testes e release: Implement one remaining data/state integration flow",
+              "scope": "Implement one remaining data/state integration flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "quality--task-04",
+              "title": "Testes e release: Add focused tests for uncovered behavior",
+              "scope": "Add focused tests for uncovered behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            }
+          ]
         }
       ]
     },
@@ -68,27 +304,217 @@
         {
           "id": "infra-auth",
           "name": "Infraestrutura e autenticação",
-          "remaining_pr_estimate": 5
+          "remaining_pr_estimate": 5,
+          "tasks": [
+            {
+              "id": "infra-auth--task-01",
+              "title": "Infraestrutura e autenticação: Audit remaining gaps and implement one missing user-facing behavior",
+              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "infra-auth--task-02",
+              "title": "Infraestrutura e autenticação: Implement one remaining validation or error-handling flow",
+              "scope": "Implement one remaining validation or error-handling flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "infra-auth--task-03",
+              "title": "Infraestrutura e autenticação: Implement one remaining data/state integration flow",
+              "scope": "Implement one remaining data/state integration flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "infra-auth--task-04",
+              "title": "Infraestrutura e autenticação: Add focused tests for uncovered behavior",
+              "scope": "Add focused tests for uncovered behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "infra-auth--task-05",
+              "title": "Infraestrutura e autenticação: Improve accessibility and responsive behavior in the area",
+              "scope": "Improve accessibility and responsive behavior in the area",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            }
+          ]
         },
         {
           "id": "policies",
           "name": "Apólices",
-          "remaining_pr_estimate": 6
+          "remaining_pr_estimate": 6,
+          "tasks": [
+            {
+              "id": "policies--task-01",
+              "title": "Apólices: Audit remaining gaps and implement one missing user-facing behavior",
+              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "policies--task-02",
+              "title": "Apólices: Implement one remaining validation or error-handling flow",
+              "scope": "Implement one remaining validation or error-handling flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "policies--task-03",
+              "title": "Apólices: Implement one remaining data/state integration flow",
+              "scope": "Implement one remaining data/state integration flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "policies--task-04",
+              "title": "Apólices: Add focused tests for uncovered behavior",
+              "scope": "Add focused tests for uncovered behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "policies--task-05",
+              "title": "Apólices: Improve accessibility and responsive behavior in the area",
+              "scope": "Improve accessibility and responsive behavior in the area",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "policies--task-06",
+              "title": "Apólices: Address remaining edge cases with regression tests",
+              "scope": "Address remaining edge cases with regression tests",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            }
+          ]
         },
         {
           "id": "claims",
           "name": "Sinistros",
-          "remaining_pr_estimate": 7
+          "remaining_pr_estimate": 7,
+          "tasks": [
+            {
+              "id": "claims--task-01",
+              "title": "Sinistros: Audit remaining gaps and implement one missing user-facing behavior",
+              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "claims--task-02",
+              "title": "Sinistros: Implement one remaining validation or error-handling flow",
+              "scope": "Implement one remaining validation or error-handling flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "claims--task-03",
+              "title": "Sinistros: Implement one remaining data/state integration flow",
+              "scope": "Implement one remaining data/state integration flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "claims--task-04",
+              "title": "Sinistros: Add focused tests for uncovered behavior",
+              "scope": "Add focused tests for uncovered behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "claims--task-05",
+              "title": "Sinistros: Improve accessibility and responsive behavior in the area",
+              "scope": "Improve accessibility and responsive behavior in the area",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "claims--task-06",
+              "title": "Sinistros: Address remaining edge cases with regression tests",
+              "scope": "Address remaining edge cases with regression tests",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "claims--task-07",
+              "title": "Sinistros: Complete a small documented integration improvement",
+              "scope": "Complete a small documented integration improvement",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            }
+          ]
         },
         {
           "id": "billing",
           "name": "Cobrança",
-          "remaining_pr_estimate": 5
+          "remaining_pr_estimate": 5,
+          "tasks": [
+            {
+              "id": "billing--task-01",
+              "title": "Cobrança: Audit remaining gaps and implement one missing user-facing behavior",
+              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "billing--task-02",
+              "title": "Cobrança: Implement one remaining validation or error-handling flow",
+              "scope": "Implement one remaining validation or error-handling flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "billing--task-03",
+              "title": "Cobrança: Implement one remaining data/state integration flow",
+              "scope": "Implement one remaining data/state integration flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "billing--task-04",
+              "title": "Cobrança: Add focused tests for uncovered behavior",
+              "scope": "Add focused tests for uncovered behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "billing--task-05",
+              "title": "Cobrança: Improve accessibility and responsive behavior in the area",
+              "scope": "Improve accessibility and responsive behavior in the area",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            }
+          ]
         },
         {
           "id": "quality",
           "name": "Testes e release",
-          "remaining_pr_estimate": 7
+          "remaining_pr_estimate": 7,
+          "tasks": [
+            {
+              "id": "quality--task-01",
+              "title": "Testes e release: Audit remaining gaps and implement one missing user-facing behavior",
+              "scope": "Audit remaining gaps and implement one missing user-facing behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "quality--task-02",
+              "title": "Testes e release: Implement one remaining validation or error-handling flow",
+              "scope": "Implement one remaining validation or error-handling flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "quality--task-03",
+              "title": "Testes e release: Implement one remaining data/state integration flow",
+              "scope": "Implement one remaining data/state integration flow",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "quality--task-04",
+              "title": "Testes e release: Add focused tests for uncovered behavior",
+              "scope": "Add focused tests for uncovered behavior",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "quality--task-05",
+              "title": "Testes e release: Improve accessibility and responsive behavior in the area",
+              "scope": "Improve accessibility and responsive behavior in the area",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "quality--task-06",
+              "title": "Testes e release: Address remaining edge cases with regression tests",
+              "scope": "Address remaining edge cases with regression tests",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            },
+            {
+              "id": "quality--task-07",
+              "title": "Testes e release: Complete a small documented integration improvement",
+              "scope": "Complete a small documented integration improvement",
+              "acceptance": "Implement only a demonstrably missing behavior after inspecting the repository; add or update focused tests; if already implemented, report no-op rather than duplicate."
+            }
+          ]
         }
       ]
     }
