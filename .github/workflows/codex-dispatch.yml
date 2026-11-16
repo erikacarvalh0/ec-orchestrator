@@ -90,6 +90,11 @@ jobs:
         run: |
           sudo useradd --create-home --shell /bin/bash codexagent
           sudo chown -R codexagent:codexagent "$GITHUB_WORKSPACE"
+          sudo chmod 755 /home/runner /home/runner/work /home/runner/work/ec-orchestrator
+          sudo chmod 1777 /tmp
+          sudo install -d -o codexagent -g codexagent -m 700 /home/codexagent/.codex
+          sudo -u codexagent test -r "$GITHUB_WORKSPACE/README.md" || sudo -u codexagent test -r "$GITHUB_WORKSPACE/.git/HEAD"
+          sudo -u codexagent test -w "$GITHUB_WORKSPACE"
       - name: Inspect conventions and implement with Codex
         uses: openai/codex-action@v1
         with:
