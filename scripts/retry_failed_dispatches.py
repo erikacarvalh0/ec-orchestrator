@@ -63,6 +63,9 @@ def run():
         if not match or issue["title"] != "[EC-DISPATCH] " + match.group(1):
             continue
         key = match.group(1)
+        if not re.search(r"--task-[0-9]{2}$", key):
+            print(f"Skipping legacy dispatch {key}: granular task ID required")
+            continue
         comments = pages(issue["comments_url"])
         statuses = [(STATUS.search(c.get("body") or "").group(1), c)
                     for c in comments if STATUS.search(c.get("body") or "")]

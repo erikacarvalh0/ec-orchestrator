@@ -42,6 +42,8 @@ def main():
     if not ranking:
         raise RuntimeError("No ranked projects")
     reserved = open_dispatch_areas()
+    # Legacy area-level dispatches are not valid task reservations.
+    reserved = {key for key in reserved if re.search(r"--task-[0-9]{2}$", key)}
     backlog = json.loads(Path("config/backlog.json").read_text())
     task_areas = {p["repo"]: {a["id"]: a for a in p["areas"]} for p in backlog["projects"]}
     projects = sorted(ranking, key=lambda p: (p["remaining_pr_estimate"], p["repo"]))
