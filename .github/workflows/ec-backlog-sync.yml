@@ -11,7 +11,9 @@ permissions:
   issues: write
   actions: write
 concurrency:
-  group: ec-backlog-sync
+  # Versioned group bypasses a GitHub Actions queue stuck on the previous group.
+  # Keep cancel-in-progress false to avoid interrupting an active sync.
+  group: ec-backlog-sync-v2
   cancel-in-progress: false
 jobs:
   sync:
