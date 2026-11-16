@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Resolve a trusted orchestrator dispatch issue to an allowlisted target."""
 import json
+from pathlib import Path
 import os
 import re
 import urllib.request
@@ -26,6 +27,12 @@ if area == task_id:
     raise SystemExit("Expected granular task ID")
 if project not in ALLOWED or issue["title"] != f"[EC-DISPATCH] {project}:{task_id}":
     raise SystemExit("Dispatch metadata mismatch")
+backlog = json.loads(Path("config/backlog.json").read_text())
+project_config = next((p for p in backlog["projects"] if p["repo"] == "erikacarvalh0/" + project), None)
+area_config = next((a for a in project_config["areas"] if a["id"] == area), None) if project_config else None
+task = next((t for t in area_config["tasks"] if t["id"] == task_id), None) if area_config else None
+if task is None:
+    raise SystemExit("Task not present in trusted backlog config")
 out = os.environ["GITHUB_OUTPUT"]
 with open(out, "a") as f:
     f.write(f"repository=erikacarvalh0/{project}\n")
