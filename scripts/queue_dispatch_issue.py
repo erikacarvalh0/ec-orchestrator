@@ -50,8 +50,15 @@ def main():
         if (m := re.search(r"(?m)^Backlog-ID: (ec-(?:finance|viagens|insurance):[a-z0-9-]+)$", i.get("body") or ""))
         and i.get("title") == "[EC-DISPATCH] " + m.group(1)
     }
+    # Bound global concurrency even when workflow_run triggers overlap.
+    workflow_runs = request("GET", ROOT + REPO + "/actions/workflows/codex-dispatch.yml/runs?per_page=100")["workflow_runs"]
+    active = sum(r["status"] != "completed" for r in workflow_runs)
+    slots = max(0, 2 - active)
+    if not slots:
+        print("All Codex slots occupied; waiting for completion")
+        return
     dispatched = []
-    for lane in plan.get("lanes", [])[:2]:
+    for lane in plan.get("lanes", [])[:slots]:
         key = lane["backlog_id"]
         target = lane["repository"]
         if not AREA_RE.fullmatch(key) or target != "erikacarvalh0/" + key.split(":")[0]:
