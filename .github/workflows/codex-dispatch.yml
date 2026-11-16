@@ -23,6 +23,7 @@ jobs:
       repository: ${{ steps.resolve.outputs.repository }}
       area: ${{ steps.resolve.outputs.area }}
       task_id: ${{ steps.resolve.outputs.task_id }}
+      task_title: ${{ steps.resolve.outputs.task_title }}
       task_scope: ${{ steps.resolve.outputs.task_scope }}
       task_acceptance: ${{ steps.resolve.outputs.task_acceptance }}
       allow_workflow_changes: ${{ steps.resolve.outputs.allow_workflow_changes }}
@@ -219,6 +220,7 @@ jobs:
           BRANCH: ${{ needs.prepare.outputs.branch }}
           AREA: ${{ needs.prepare.outputs.area }}
           TASK_ID: ${{ needs.prepare.outputs.task_id }}
+          TASK_TITLE: ${{ needs.prepare.outputs.task_title }}
           ISSUE_URL: ${{ needs.prepare.outputs.issue_url }}
           PR_BASE: ${{ steps.dependency.outputs.base }}
           DEPENDENCY_PR: ${{ steps.dependency.outputs.dependency }}
@@ -229,8 +231,16 @@ jobs:
             echo 'Codex produced no changes; no PR created.'
             exit 1
           fi
-          if git status --porcelain | grep -E '(^|/)(\.github/|\.env|secrets/)' ; then
+          if git status --porcelain | grep -E '(^|/)(\.env|secrets/)' ; then
             echo 'Sensitive file changes detected; refusing to publish.'
+            exit 1
+          fi
+          if git status --porcelain | grep -E '\.github/' | grep -v -E '\.github/workflows/' ; then
+            echo 'Non-workflow .github changes are not permitted.'
+            exit 1
+          fi
+          if [ "$ALLOW_WORKFLOW_CHANGES" != true ] && git status --porcelain | grep -E '\.github/'; then
+            echo 'Workflow changes not allowed for this dispatch task.'
             exit 1
           fi
           git switch -c "$BRANCH"
@@ -239,7 +249,7 @@ jobs:
           git -c user.name='ec-orchestrator[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "feat: improve $AREA"
           git -c http.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)" push origin "HEAD:refs/heads/$BRANCH"
           python /tmp/ec-build-product-pr.py --repo "$TARGET_REPO" --area "$TASK_ID" --issue-url "$ISSUE_URL" --dependency "$DEPENDENCY_PR" --base "$PR_BASE" --output /tmp/ec-product-pr-body.md
-          gh pr create -R "$TARGET_REPO" --base "$PR_BASE" --head "$BRANCH" --title "feat: improve $AREA" --body-file /tmp/ec-product-pr-body.md
+          gh pr create -R "$TARGET_REPO" --base "$PR_BASE" --head "$BRANCH" --title "$TASK_TITLE" --body-file /tmp/ec-product-pr-body.md
 
   report:
     if: ${{ always() }}
