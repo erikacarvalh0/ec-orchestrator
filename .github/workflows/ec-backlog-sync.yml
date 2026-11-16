@@ -17,9 +17,9 @@ jobs:
       - name: Collect GitHub evidence
         env:
           EC_BACKLOG_READ_TOKEN: ${{ secrets.EC_BACKLOG_READ_TOKEN }}
-        run: python scripts/ec_backlog_sync.py
+        run: |\n          python scripts/ec_backlog_sync.py\n          python scripts/rank_backlog.py
       - uses: actions/upload-artifact@v4
         with:
           name: ec-backlog-report
-          path: reports/github-sync.json
+          path: |\n            reports/github-sync.json\n            reports/priority.json
           retention-days: 14
