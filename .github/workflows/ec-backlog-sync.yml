@@ -1,0 +1,25 @@
+name: Sync EC backlogs (read only)
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 * * * *'
+permissions:
+  contents: read
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Collect GitHub evidence
+        env:
+          EC_BACKLOG_READ_TOKEN: ${{ secrets.EC_BACKLOG_READ_TOKEN }}
+        run: python scripts/ec_backlog_sync.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ec-backlog-report
+          path: reports/github-sync.json
+          retention-days: 14

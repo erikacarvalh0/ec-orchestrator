@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "repositories": {
+    "erikacarvalh0/ec-orchestrator": {
+      "merge_mode": "automatic",
+      "required_ci": true,
+      "allow_merge_without_checks": false,
+      "block_sensitive_paths": [".github/workflows/**", "config/merge-policy.json", "**/.env*", "**/secrets/**"],
+      "max_repair_attempts": 2
+    },
+    "erikacarvalh0/ec-finance": {"merge_mode": "manual"},
+    "erikacarvalh0/ec-viagens": {"merge_mode": "manual"},
+    "erikacarvalh0/ec-insurance": {"merge_mode": "manual"}
+  }
+}
