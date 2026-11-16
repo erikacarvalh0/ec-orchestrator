@@ -65,16 +65,13 @@ def main():
             raise RuntimeError(f"Invalid lane metadata: {key} {target}")
         # Do not create another PR while one is already open for this task or area.
         prs = pages(ROOT + target + "/pulls?state=open", os.environ["EC_BACKLOG_READ_TOKEN"])
+        # Exact task marker prevents duplicate work; different tasks in the
+        # same area may proceed as independently reviewed PRs.
         if any(
-            key in (p.get("body") or "")
-            or lane["area_id"] in (p.get("body") or "")
-            or (
-                p["head"]["ref"].startswith("codex/dispatch-")
-                and ("-" + key.split(":")[1].split("--task-")[0] + "--task-") in p["head"]["ref"]
-            )
+            re.search(r"(?m)^Backlog-ID: " + re.escape(key) + r"$", p.get("body") or "")
             for p in prs
         ):
-            print(f"Skipping {key}: existing product PR for task/area")
+            print(f"Skipping {key}: existing product PR for this exact task")
             continue
         existing = [i for (area, _), i in dispatches.items() if area == key]
         if existing:
@@ -83,9 +80,9 @@ def main():
         else:
             body = (
                 f"Backlog-ID: {key}\n\nRepository: {target}\n"
-                f"Task-Title: {lane['task_title']}\\n"
-                f"Task-Scope: {lane['task_scope']}\\n"
-                f"Task-Acceptance: {lane['task_acceptance']}\\n"
+                f"Task-Title: {lane['task_title']}\n"
+                f"Task-Scope: {lane['task_scope']}\n"
+                f"Task-Acceptance: {lane['task_acceptance']}\n"
                 "Status: queued for autonomous dispatch\n\n"
                 "Acceptance checklist:\n"
                 "- [ ] Implement a narrowly scoped change\n"

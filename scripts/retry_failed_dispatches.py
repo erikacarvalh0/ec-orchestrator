@@ -5,6 +5,7 @@ import json
 import os
 import re
 import urllib.request
+from pathlib import Path
 
 BASE = "https://api.github.com/repos/"
 ORCH = "erikacarvalh0/ec-orchestrator"
@@ -55,6 +56,12 @@ def run():
          for r in successful),
         default=None,
     )
+    backlog = json.loads(Path("config/backlog.json").read_text())
+    eligible = {
+        p["repo"].split("/")[-1] + ":" + t["id"]
+        for p in backlog["projects"] for a in p["areas"] for t in a["tasks"]
+        if t.get("status") == "ready"
+    }
     issues = pages(BASE + ORCH + "/issues?state=open")
     for issue in issues:
         if "pull_request" in issue:
@@ -63,6 +70,9 @@ def run():
         if not match or issue["title"] != "[EC-DISPATCH] " + match.group(1):
             continue
         key = match.group(1)
+        if key not in eligible:
+            print(f"Skipping obsolete or blocked dispatch {key}")
+            continue
         if not re.search(r"--task-[0-9]{2}$", key):
             print(f"Skipping legacy dispatch {key}: granular task ID required")
             continue
