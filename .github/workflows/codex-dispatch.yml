@@ -107,7 +107,20 @@ jobs:
           sudo setfacl -d -m u:codexagent:rwx /tmp/ec-codex-shared
           echo 'Checking shared Codex home ACL'
           sudo getfacl -p /tmp/ec-codex-shared
-          sudo -u codexagent test -w /tmp/ec-codex-shared || { echo 'FAIL: codexagent cannot write shared Codex home in /tmp'; exit 1; }
+          echo 'Diagnosing effective filesystem access'
+          id codexagent
+          sudo -u codexagent id
+          namei -l /tmp/ec-codex-shared
+          stat -c '%a %U:%G %n' /tmp /tmp/ec-codex-shared
+          findmnt -T /tmp/ec-codex-shared -o TARGET,FSTYPE,OPTIONS
+          if ! sudo -u codexagent test -w /tmp/ec-codex-shared; then
+            echo 'ACL test -w failed; testing real file creation'
+            if ! sudo -u codexagent touch /tmp/ec-codex-shared/.access-check; then
+              echo 'FAIL: real file creation failed; investigate mount/ACL/security policy'
+              exit 1
+            fi
+          fi
+          sudo -u codexagent rm -f /tmp/ec-codex-shared/.access-check
           sudo -u codexagent sh -c 'touch /tmp/ec-codex-shared/.access-check && rm /tmp/ec-codex-shared/.access-check'
           sudo install -d -o codexagent -g codexagent -m 700 /home/codexagent
           sudo chown -R codexagent:codexagent "$GITHUB_WORKSPACE"
