@@ -22,6 +22,7 @@ jobs:
     outputs:
       repository: ${{ steps.resolve.outputs.repository }}
       area: ${{ steps.resolve.outputs.area }}
+      task_id: ${{ steps.resolve.outputs.task_id }}
       branch: ${{ steps.resolve.outputs.branch }}
       issue_url: ${{ steps.resolve.outputs.issue_url }}
     steps:
@@ -183,6 +184,8 @@ jobs:
           prompt: |
             Implement one small, independently reviewable improvement in area
             "${{ needs.prepare.outputs.area }}" of this repository.
+            Task ID: "${{ needs.prepare.outputs.task_id }}".
+            Inspect the linked dispatch issue scope before coding.
             First inspect README, AGENTS.md, package manifests, linters,
             formatters, tests, git log, and recent local history. Follow existing
             indentation, architecture, naming, commit/PR conventions.
