@@ -31,7 +31,18 @@ jobs:
           python scripts/rank_backlog.py
           python scripts/reconcile_prs.py
           python scripts/dispatch_plan.py
+      - name: Check Codex infrastructure circuit breaker
+        id: breaker
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python scripts/codex_circuit_breaker.py | tee /tmp/ec-breaker.log
+          if grep -q 'Circuit breaker OPEN' /tmp/ec-breaker.log; then
+            echo 'open=true' >> "$GITHUB_OUTPUT"
+          fi
       - name: Retry one failed dispatch if safe
+        if: ${{ steps.breaker.outputs.open != 'true' }}
         id: retry
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -43,7 +54,7 @@ jobs:
             echo 'retried=true' >> "$GITHUB_OUTPUT"
           fi
       - name: Queue next dispatch task (orchestrator only)
-        if: ${{ steps.retry.outputs.retried != 'true' }}
+        if: ${{ steps.breaker.outputs.open != 'true' && steps.retry.outputs.retried != 'true' }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
           EC_BACKLOG_READ_TOKEN: ${{ secrets.EC_BACKLOG_READ_TOKEN }}
