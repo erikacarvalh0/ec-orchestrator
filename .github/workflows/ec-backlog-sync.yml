@@ -18,6 +18,7 @@ jobs:
           python-version: '3.11'
       - name: Collect GitHub evidence
         env:
+          GITHUB_TOKEN: ${{ github.token }}
           EC_BACKLOG_READ_TOKEN: ${{ secrets.EC_BACKLOG_READ_TOKEN }}
         run: |
           python scripts/ec_backlog_sync.py
