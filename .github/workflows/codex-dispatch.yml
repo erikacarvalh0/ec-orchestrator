@@ -96,7 +96,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ ! -f package-lock.json ] && [ ! -f npm-shrinkwrap.json ] && [ ! -f yarn.lock ]; then
-            printf '%s\\n' '{"name":"ec-codex-bootstrap","version":"0.0.0","lockfileVersion":3,"requires":true,"packages":{"":{"name":"ec-codex-bootstrap","version":"0.0.0"}}}' > package-lock.json
+            printf '%s\n' '{"name":"ec-codex-bootstrap","version":"0.0.0","lockfileVersion":3,"requires":true,"packages":{"":{"name":"ec-codex-bootstrap","version":"0.0.0"}}}' > package-lock.json
             touch /tmp/ec-generated-npm-lockfile
           fi
           test -f package-lock.json || test -f npm-shrinkwrap.json || test -f yarn.lock
