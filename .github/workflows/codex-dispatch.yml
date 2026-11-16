@@ -290,12 +290,3 @@ jobs:
             printf '\nProduct PRs always require manual review and merge.\n'
           } > /tmp/ec-dispatch-status.md
           gh issue comment "$ISSUE_NUMBER" -R "$GITHUB_REPOSITORY" --body-file /tmp/ec-dispatch-status.md
-
-      - name: Start next scheduling cycle
-        if: ${{ always() }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          gh workflow run ec-backlog-sync.yml -R "$GITHUB_REPOSITORY" --ref main
-          echo "Requested next EC scheduling cycle after Codex completion"
