@@ -95,6 +95,13 @@ jobs:
           sudo install -d -o codexagent -g codexagent -m 700 /home/codexagent/.codex
           sudo -u codexagent test -r "$GITHUB_WORKSPACE/README.md" || sudo -u codexagent test -r "$GITHUB_WORKSPACE/.git/HEAD"
           sudo -u codexagent test -w "$GITHUB_WORKSPACE"
+          # The proxy launches under the runner account, while its server-info
+          # file lives in the dedicated Codex user's home. Permit traversal
+          # without exposing API credentials or world-readable home contents.
+          sudo chmod 711 /home/codexagent /home/codexagent/.codex
+          # Verify that the runner can create the proxy's server-info file.
+          test -x /home/codexagent/.codex
+          sudo -u codexagent test -w /home/codexagent/.codex
       - name: Inspect conventions and implement with Codex
         uses: openai/codex-action@v1
         with:
