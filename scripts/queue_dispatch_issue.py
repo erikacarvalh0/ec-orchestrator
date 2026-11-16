@@ -83,6 +83,9 @@ def main():
         else:
             body = (
                 f"Backlog-ID: {key}\n\nRepository: {target}\n"
+                f"Task-Title: {lane['task_title']}\\n"
+                f"Task-Scope: {lane['task_scope']}\\n"
+                f"Task-Acceptance: {lane['task_acceptance']}\\n"
                 "Status: queued for autonomous dispatch\n\n"
                 "Acceptance checklist:\n"
                 "- [ ] Implement a narrowly scoped change\n"
