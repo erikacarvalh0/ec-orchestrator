@@ -93,7 +93,7 @@ jobs:
           # The action's API proxy runs as the GitHub runner, while Codex
           # executes as codexagent. Use a runner-writable shared Codex home
           # outside the agent-owned directory, with traversal for Codex.
-          sudo install -d -o runner -g runner -m 700 /tmp/ec-codex-shared
+          sudo install -d -o runner -g runner -m 755 /tmp/ec-codex-shared
           # The action writes config.toml as runner after this step. Give only
           # codexagent inherited ACL access; never make proxy config public.
           if ! command -v setfacl >/dev/null 2>&1; then
@@ -103,8 +103,14 @@ jobs:
           command -v setfacl
           echo 'Checking shared directory parent traversal'
           sudo -u codexagent test -x /tmp || { echo 'FAIL: agent cannot traverse /tmp'; exit 1; }
-          sudo setfacl -m u:codexagent:rwx /tmp/ec-codex-shared
-          sudo setfacl -d -m u:codexagent:rwx /tmp/ec-codex-shared
+          # The action itself must read its server-info JSON as runner.
+          # A dedicated 0755 directory allows traversal without making
+          # files writable by other users; proxy server-info is chmod 0444
+          # by the action after creation.
+          sudo setfacl -b /tmp/ec-codex-shared
+          sudo chmod 755 /tmp/ec-codex-shared
+          sudo -u runner sh -c 'touch /tmp/ec-codex-shared/.runner-check && rm /tmp/ec-codex-shared/.runner-check'
+          sudo -u codexagent sh -c 'cd /tmp/ec-codex-shared && pwd >/dev/null'
           echo 'Checking shared Codex home ACL'
           sudo getfacl -p /tmp/ec-codex-shared
           echo 'Diagnosing effective filesystem access'
@@ -113,15 +119,9 @@ jobs:
           namei -l /tmp/ec-codex-shared
           stat -c '%a %U:%G %n' /tmp /tmp/ec-codex-shared
           findmnt -T /tmp/ec-codex-shared -o TARGET,FSTYPE,OPTIONS
-          if ! sudo -u codexagent test -w /tmp/ec-codex-shared; then
-            echo 'ACL test -w failed; testing real file creation'
-            if ! sudo -u codexagent touch /tmp/ec-codex-shared/.access-check; then
-              echo 'FAIL: real file creation failed; investigate mount/ACL/security policy'
-              exit 1
-            fi
-          fi
-          sudo -u codexagent rm -f /tmp/ec-codex-shared/.access-check
-          sudo -u codexagent sh -c 'touch /tmp/ec-codex-shared/.access-check && rm /tmp/ec-codex-shared/.access-check'
+          sudo -u runner sh -c 'printf "probe" > /tmp/ec-codex-shared/.access-check && chmod 644 /tmp/ec-codex-shared/.access-check'
+          sudo -u codexagent cat /tmp/ec-codex-shared/.access-check >/dev/null
+          sudo rm /tmp/ec-codex-shared/.access-check
           sudo install -d -o codexagent -g codexagent -m 700 /home/codexagent
           sudo chown -R codexagent:codexagent "$GITHUB_WORKSPACE"
           sudo chmod 755 /home/runner /home/runner/work /home/runner/work/ec-orchestrator
