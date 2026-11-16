@@ -1,0 +1,28 @@
+name: Safe orchestrator auto-merge
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/15 * * * *'
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+  statuses: read
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    concurrency:
+      group: ec-orchestrator-auto-merge
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Evaluate merge policy and eligible PRs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python scripts/auto_merge_orchestrator.py
