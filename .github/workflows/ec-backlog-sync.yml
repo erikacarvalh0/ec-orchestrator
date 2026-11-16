@@ -34,6 +34,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           EC_BACKLOG_READ_TOKEN: ${{ secrets.EC_BACKLOG_READ_TOKEN }}
         run: |
+          set -euo pipefail
           python scripts/retry_failed_dispatches.py | tee /tmp/ec-retry.log
           if grep -q '"retried_issue":' /tmp/ec-retry.log; then
             echo 'retried=true' >> "$GITHUB_OUTPUT"
