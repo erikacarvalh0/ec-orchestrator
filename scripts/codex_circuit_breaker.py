@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pause dispatch after three consecutive infrastructure failures.
+"""Pause dispatch after three consecutive infrastructure or Codex agent failures.
 
 Close the generated breaker issue to acknowledge/reset the circuit.
 """
@@ -19,6 +19,9 @@ INFRA_STEPS = (
     "Prepare dedicated unprivileged Codex workspace",
     "Ensure npm lockfile", "Bootstrap Codex proxy",
     "Verify and grant agent read access", "Restore workspace ownership",
+    # Quota/billing failures are reported by codex-action in this step.
+    # Treat repeated agent failures as fail-closed to avoid API-cost retry loops.
+    "Inspect conventions and implement with Codex",
 )
 
 
@@ -87,7 +90,7 @@ def check():
         return False
 
     body = (
-        "Automatic dispatch paused after 3 consecutive Codex infrastructure failures.\n\n"
+        "Automatic dispatch paused after 3 consecutive Codex infrastructure/agent failures (including quota exhaustion).\n\n"
         + "\n".join(
             f"- Run https://github.com/{REPO}/actions/runs/{run_id}: "
             + ", ".join(steps) for run_id, steps in failures
