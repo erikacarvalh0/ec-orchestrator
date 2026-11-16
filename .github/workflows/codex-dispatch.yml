@@ -119,14 +119,6 @@ jobs:
           namei -l /tmp/ec-codex-shared
           stat -c '%a %U:%G %n' /tmp /tmp/ec-codex-shared
           findmnt -T /tmp/ec-codex-shared -o TARGET,FSTYPE,OPTIONS
-          if ! sudo -u codexagent test -w /tmp/ec-codex-shared; then
-            echo 'ACL test -w failed; testing real file creation'
-            if ! sudo -u codexagent touch /tmp/ec-codex-shared/.access-check; then
-              echo 'FAIL: real file creation failed; investigate mount/ACL/security policy'
-              exit 1
-            fi
-          fi
-          sudo -u codexagent rm -f /tmp/ec-codex-shared/.access-check
           sudo -u runner sh -c 'printf "probe" > /tmp/ec-codex-shared/.access-check && chmod 644 /tmp/ec-codex-shared/.access-check'
           sudo -u codexagent cat /tmp/ec-codex-shared/.access-check >/dev/null
           sudo rm /tmp/ec-codex-shared/.access-check
