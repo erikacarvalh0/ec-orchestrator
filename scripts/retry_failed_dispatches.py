@@ -100,8 +100,8 @@ def run():
         # recovery rather than risking duplicate jobs on the next sync.
         api("POST", issue["comments_url"], payload={
             "body": "### Dispatch status: retry_queued\n\n"
-                    ("One recovery retry reserved after a successful executor bootstrap. " if recovery else "One automatic retry reserved after a failed execution. ") 
-                    "If dispatch does not start, investigate manually."
+                    + ("One recovery retry reserved after a successful executor bootstrap. " if recovery else "One automatic retry reserved after a failed execution. ")
+                    + "If dispatch does not start, investigate manually."
         })
         api("POST", BASE + ORCH + "/actions/workflows/codex-dispatch.yml/dispatches",
             payload={"ref": "main", "inputs": {"issue_number": str(issue["number"])}})
